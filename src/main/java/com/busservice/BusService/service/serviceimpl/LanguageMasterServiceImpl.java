@@ -7,6 +7,7 @@ import com.busservice.BusService.repository.LanguageMasterRepo;
 import com.busservice.BusService.request.LanguageMasterCreateRequest;
 import com.busservice.BusService.response.BusPassResponse;
 import com.busservice.BusService.response.LanguageMasterReponse;
+import com.busservice.BusService.response.dropdown.LanguageMasterDD;
 import com.busservice.BusService.service.LanguageMasterService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,6 +17,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -98,6 +100,16 @@ public class LanguageMasterServiceImpl implements LanguageMasterService {
                     .build();
         }
 
+    }
+
+    @Override
+    public BusPassResponse findDDLanguageMasterDetails() {
+        List<Object[]> languageMasterData = languageMasterRepo.findDDLanguageMasterDetails();
+        if (languageMasterData.size() > 0) {
+            List<LanguageMasterDD> languageMasterReponses = languageMasterData.stream().map(LanguageMasterDD::new).collect(Collectors.toList());
+            return BusPassResponse.builder().isSuccess(true).responseData(languageMasterReponses).build();
+        }
+        return BusPassResponse.builder().isSuccess(false).build();
     }
 
 

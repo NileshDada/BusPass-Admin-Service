@@ -17,13 +17,16 @@ public interface LanguageMasterRepo extends JpaRepository<LanguageMasterEntity, 
     public Optional<LanguageMasterEntity> findByLangNameEqualsIgnoreCase(String langName);
 
     @Query(value = SQLQueryConstants.LANGUAGE_MASTER_DETAILS_BY_PAGING, nativeQuery = true)
-    List<Object[]> getLanguageMasterDetail(@Param("langId") Integer langId,@Param("langName") String langName,@Param("statusCd") String statusCd, @Param("sortName") String sortName, @Param("pageSize") Integer pageSize, @Param("pageOffset") Integer pageOffset);
+    List<Object[]> getLanguageMasterDetail(@Param("langId") Integer langId, @Param("langName") String langName, @Param("statusCd") String statusCd, @Param("sortName") String sortName, @Param("pageSize") Integer pageSize, @Param("pageOffset") Integer pageOffset);
 
     @Query(value = SQLQueryConstants.LANGUAGE_MASTER_DETAILS_BY_PAGING_COUNT, nativeQuery = true)
-    Integer getLanguageMasterDetailsCount(@Param("langId") Integer langId,@Param("langName") String langName,@Param("statusCd") String statusCd);
+    Integer getLanguageMasterDetailsCount(@Param("langId") Integer langId, @Param("langName") String langName, @Param("statusCd") String statusCd);
 
     @Modifying
     @Query(value = "update language_master set status_cd='I' where lang_id =:langId", nativeQuery = true)
     public int deleteLanguageMasterDetails(@Param("langId") Integer langId);
+
+    @Query(value = "select lang_id,lang_name from language_master where status_cd ='A'", nativeQuery = true)
+    public List<Object[]> findDDLanguageMasterDetails();
 
 }

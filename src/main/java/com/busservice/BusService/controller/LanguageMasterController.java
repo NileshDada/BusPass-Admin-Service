@@ -4,6 +4,7 @@ package com.busservice.BusService.controller;
 import com.busservice.BusService.request.LanguageMasterCreateRequest;
 import com.busservice.BusService.response.BusPassResponse;
 import com.busservice.BusService.response.LanguageMasterReponse;
+import com.busservice.BusService.response.dropdown.LanguageMasterDD;
 import com.busservice.BusService.service.LanguageMasterService;
 import io.swagger.v3.oas.annotations.Parameter;
 import org.springdoc.core.converters.models.PageableAsQueryParam;
@@ -50,6 +51,12 @@ public class LanguageMasterController {
     @DeleteMapping
     public ResponseEntity<BusPassResponse> deleteLanguageMasterDetails(@RequestParam(required = false) Integer langId) {
         BusPassResponse response = languageMasterService.deleteLanguageMasterDetails(langId);
+        return new ResponseEntity<>(response, HttpStatus.OK);
+    }
+
+    @GetMapping (value = "/dd-language-master")
+    public ResponseEntity<BusPassResponse> findDDLanguageMasterDetails() {
+        BusPassResponse response = languageMasterService.findDDLanguageMasterDetails();
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
