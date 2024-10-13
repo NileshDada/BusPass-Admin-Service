@@ -23,3 +23,18 @@ create table routes_master(
         );
 
 
+
+create table bus_stop_master(
+            bus_stop_id serial  PRIMARY key,
+            routes_id Integer,
+            bus_stop_name VARCHAR(140),
+             bus_stop_no VARCHAR(140),
+            remark VARCHAR(200),
+            status_cd VARCHAR(10),
+            crte_user_id VARCHAR(20) ,
+            crte_ts TIMESTAMP not null DEFAULT CURRENT_TIMESTAMP,
+            lst_updt_ts TIMESTAMP null,
+            lst_updt_user_id VARCHAR(20) null
+        );
+
+
