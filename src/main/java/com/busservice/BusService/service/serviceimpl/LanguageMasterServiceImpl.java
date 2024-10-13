@@ -15,6 +15,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
+import javax.transaction.Transactional;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -29,8 +30,8 @@ public class LanguageMasterServiceImpl implements LanguageMasterService {
 
     @Override
     public BusPassResponse saveLanguageMaster(LanguageMasterCreateRequest languageMasterCreateRequest) {
-        Optional<LanguageMasterEntity> optionalDepartmentEntity = languageMasterRepo.findByLangNameEqualsIgnoreCase(languageMasterCreateRequest.getLangName() );
-        if(optionalDepartmentEntity.isPresent()){
+        Optional<LanguageMasterEntity> optionalDepartmentEntity = languageMasterRepo.findByLangNameEqualsIgnoreCase(languageMasterCreateRequest.getLangName());
+        if (optionalDepartmentEntity.isPresent()) {
             log.error("Inside LanguageMasterServiceImpl >> saveLanguageMaster()");
             throw new BusPassException("LanguageMasterServiceImpl Class", false, "Language name already exist");
         }
@@ -63,8 +64,8 @@ public class LanguageMasterServiceImpl implements LanguageMasterService {
                 //sortDirection = order.get().getDirection().toString(); // Sort ASC or DESC
             }
 
-           Integer  totalCount = languageMasterRepo.getLanguageMasterDetailsCount(langId, langName,statusCd);
-            List<Object[]> languageMasterData = languageMasterRepo.getLanguageMasterDetail(langId, langName,statusCd,sortName, pageSize, pageOffset );
+            Integer totalCount = languageMasterRepo.getLanguageMasterDetailsCount(langId, langName, statusCd);
+            List<Object[]> languageMasterData = languageMasterRepo.getLanguageMasterDetail(langId, langName, statusCd, sortName, pageSize, pageOffset);
             List<LanguageMasterReponse> languageMasterReponses = languageMasterData.stream().map(LanguageMasterReponse::new).collect(Collectors.toList());
             if (languageMasterReponses.size() > 0) {
                 return BusPassResponse.builder()
@@ -73,12 +74,30 @@ public class LanguageMasterServiceImpl implements LanguageMasterService {
                         .build();
             }
         } catch (Exception ex) {
-            log.error("LanguageMasterServiceImpl >>getAllLanguageMasterDetails :{}", ex);
+            log.error("LanguageMasterServiceImpl >>getAllLanguageMasterDetails : {}", ex);
             throw new BusPassException("LanguageMasterServiceImpl", false, ex.getMessage());
         }
         return BusPassResponse.builder()
                 .isSuccess(false)
                 .build();
+    }
+
+    @Transactional
+    @Override
+    public BusPassResponse deleteLanguageMasterDetails(Integer langId) {
+        BusPassResponse busPassResponse = new BusPassResponse();
+        try {
+            languageMasterRepo.deleteLanguageMasterDetails(langId);
+            busPassResponse.setSuccess(true);
+            busPassResponse.setResponseMessage("Language details deleted Successfully");
+            return busPassResponse;
+        } catch (Exception ex) {
+            log.error("Inside LanguageMasterServiceImpl >> deleteLanguageMasterDetails : {}", ex);
+            return BusPassResponse.builder()
+                    .isSuccess(false)
+                    .build();
+        }
+
     }
 
 
@@ -89,6 +108,6 @@ public class LanguageMasterServiceImpl implements LanguageMasterService {
         languageMasterEntity.setRemark(languageMasterCreateRequest.getRemark());
         languageMasterEntity.setStatusCd(languageMasterCreateRequest.getStatusCd());
         languageMasterEntity.setCreatedUserId(languageMasterCreateRequest.getEmployeeId());
-        return  languageMasterEntity;
+        return languageMasterEntity;
     }
 }

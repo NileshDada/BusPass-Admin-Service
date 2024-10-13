@@ -3,6 +3,7 @@ package com.busservice.BusService.repository;
 import com.busservice.BusService.constant.SQLQueryConstants;
 import com.busservice.BusService.entity.LanguageMasterEntity;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
@@ -20,5 +21,9 @@ public interface LanguageMasterRepo extends JpaRepository<LanguageMasterEntity, 
 
     @Query(value = SQLQueryConstants.LANGUAGE_MASTER_DETAILS_BY_PAGING_COUNT, nativeQuery = true)
     Integer getLanguageMasterDetailsCount(@Param("langId") Integer langId,@Param("langName") String langName,@Param("statusCd") String statusCd);
+
+    @Modifying
+    @Query(value = "update language_master set status_cd='I' where lang_id =:langId", nativeQuery = true)
+    public int deleteLanguageMasterDetails(@Param("langId") Integer langId);
 
 }

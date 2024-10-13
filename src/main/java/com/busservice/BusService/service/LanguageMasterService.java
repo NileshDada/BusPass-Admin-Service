@@ -10,6 +10,6 @@ public interface LanguageMasterService {
 
     public BusPassResponse findLanguageMasterDetails(Integer langId, String langName, String statusCd, Pageable pageable);
 
-
+    public BusPassResponse deleteLanguageMasterDetails(Integer langId);
 
 }

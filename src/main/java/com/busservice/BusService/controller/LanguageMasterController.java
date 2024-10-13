@@ -12,6 +12,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -40,10 +41,15 @@ public class LanguageMasterController {
     public ResponseEntity<BusPassResponse> findLanguageMasterDetails(@RequestParam(required = false) Integer langId,
                                                                      @RequestParam(required = false) String langName,
                                                                      @RequestParam(required = false) String statusCd,
-                                                                     @Parameter(hidden = true) Pageable pageable
-    ) {
+                                                                     @Parameter(hidden = true) Pageable pageable) {
 
         BusPassResponse response = languageMasterService.findLanguageMasterDetails(langId, langName, statusCd, pageable);
+        return new ResponseEntity<>(response, HttpStatus.OK);
+    }
+
+    @DeleteMapping
+    public ResponseEntity<BusPassResponse> deleteLanguageMasterDetails(@RequestParam(required = false) Integer langId) {
+        BusPassResponse response = languageMasterService.deleteLanguageMasterDetails(langId);
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
