@@ -6,12 +6,18 @@ import com.busservice.BusService.exception.BusPassException;
 import com.busservice.BusService.repository.LanguageMasterRepo;
 import com.busservice.BusService.request.LanguageMasterCreateRequest;
 import com.busservice.BusService.response.BusPassResponse;
+import com.busservice.BusService.response.LanguageMasterReponse;
 import com.busservice.BusService.service.LanguageMasterService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 @Slf4j
@@ -41,6 +47,38 @@ public class LanguageMasterServiceImpl implements LanguageMasterService {
             log.error("Inside LanguageMasterServiceImpl >> saveLanguageMaster()");
             throw new BusPassException("LanguageMasterServiceImpl", false, ex.getMessage());
         }
+    }
+
+    @Override
+    public BusPassResponse findLanguageMasterDetails(Integer langId, String langName, String statusCd, Pageable requestPageable) {
+        try {
+            String sortName = null;
+            //  String sortDirection = null;
+            Integer pageSize = requestPageable.getPageSize();
+            Integer pageOffset = (int) requestPageable.getOffset();
+            // pageable = KPIUtils.sort(requestPageable, sortParam, pageDirection);
+            Optional<Sort.Order> order = requestPageable.getSort().get().findFirst();
+            if (order.isPresent()) {
+                sortName = order.get().getProperty();  //order by this field
+                //sortDirection = order.get().getDirection().toString(); // Sort ASC or DESC
+            }
+
+           Integer  totalCount = languageMasterRepo.getLanguageMasterDetailsCount(langId, langName,statusCd);
+            List<Object[]> languageMasterData = languageMasterRepo.getLanguageMasterDetail(langId, langName,statusCd,sortName, pageSize, pageOffset );
+            List<LanguageMasterReponse> languageMasterReponses = languageMasterData.stream().map(LanguageMasterReponse::new).collect(Collectors.toList());
+            if (languageMasterReponses.size() > 0) {
+                return BusPassResponse.builder()
+                        .isSuccess(true)
+                        .responseData(new PageImpl<>(languageMasterReponses, requestPageable, totalCount))
+                        .build();
+            }
+        } catch (Exception ex) {
+            log.error("LanguageMasterServiceImpl >>getAllLanguageMasterDetails :{}", ex);
+            throw new BusPassException("LanguageMasterServiceImpl", false, ex.getMessage());
+        }
+        return BusPassResponse.builder()
+                .isSuccess(false)
+                .build();
     }
 
 
