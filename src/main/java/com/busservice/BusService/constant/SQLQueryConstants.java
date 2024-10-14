@@ -10,4 +10,12 @@ public final class SQLQueryConstants {
 
     public static final String BUS_STOP_MASTER_DETAILS_BY_PAGING = "select bsm.bus_stop_id, bsm.bus_stop_name, bsm.bus_stop_no, rm.routes_id, rm.routes_name, rm.routes_start_location, rm.routes_end_location, bsm.remark, bsm.status_cd from bus_stop_master bsm, routes_master rm where bsm.routes_id=rm.routes_id and bsm.bus_stop_id = coalesce(:busStopId, bsm.bus_stop_id) and bsm.bus_stop_name = coalesce(:busStopName, bsm.bus_stop_name) and bsm.status_cd = coalesce(:statusCd, bsm.status_cd) order by :sortName asc limit :pageSize offset :pageOffset";
     public static final String BUS_STOP_MASTER_DETAILS_BY_PAGING_COUNT = "select count(*) from bus_stop_master bsm, routes_master rm where bsm.routes_id=rm.routes_id and bsm.bus_stop_id = coalesce(:busStopId, bsm.bus_stop_id) and bsm.bus_stop_name = coalesce(:busStopName, bsm.bus_stop_name) and bsm.status_cd = coalesce(:statusCd, bsm.status_cd)";
+
+    public static final String DOCUMENT_MASTER_DETAILS_BY_PAGING = "select doc_id, doc_name, remark, status_cd from document_master where doc_id = coalesce(:docId, doc_id) and doc_name = coalesce(:docName, doc_name) and status_cd = coalesce(:statusCd, status_cd) order by :sortName asc limit :pageSize offset :pageOffset";
+    public static final String DOCUMENT_MASTER_DETAILS_BY_PAGING_COUNT = "select count(*) from document_master where doc_id = coalesce(:docId, doc_id) and doc_name = coalesce(:docName, doc_name) and status_cd = coalesce(:statusCd, status_cd)";
+
+
+    public static final String PASS_TYPE_MASTER_DETAILS_BY_PAGING = "select pass_type_id, pass_type_name,pass_type_description,pass_type_end_date,pass_type_collection_location,pass_type_amount, remark, status_cd from pass_type_master where pass_type_id = coalesce(:passTypeId, pass_type_id) and pass_type_name = coalesce(:passTypeName, pass_type_name) and status_cd = coalesce(:statusCd, status_cd) order by :sortName asc limit :pageSize offset :pageOffset";
+    public static final String PASS_TYPE_MASTER_DETAILS_BY_PAGING_COUNT = "select count(*) from pass_type_master where pass_type_id = coalesce(:passTypeId, pass_type_id) and pass_type_name = coalesce(:passTypeName, pass_type_name) and status_cd = coalesce(:statusCd, status_cd)";
 }
+
