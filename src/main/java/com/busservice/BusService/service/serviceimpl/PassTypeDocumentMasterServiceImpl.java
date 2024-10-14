@@ -59,6 +59,7 @@ public class PassTypeDocumentMasterServiceImpl implements PassTypeDocumentMaster
     @Override
     public BusPassResponse findPassTypeDocumentDetails(Integer passTypeDocId, Integer passTypeId, String statusCd, Pageable requestPageable) {
         try {
+            log.debug("passTypeDocId : {}", passTypeDocId);
             String sortName = null;
             //  String sortDirection = null;
             Integer pageSize = requestPageable.getPageSize();
