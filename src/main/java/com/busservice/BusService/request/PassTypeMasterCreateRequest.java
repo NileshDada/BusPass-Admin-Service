@@ -25,7 +25,10 @@ public class PassTypeMasterCreateRequest {
 
     @Schema(example = "400.50", description = "This field is used for pass type amount")
     private String passTypeAmount;
-    
+
+    @Schema(example = "100", description = "This field is used for routes end location name")
+    private String passTypeAgeLimit;
+
     @Schema(example = "This is remark", description = "This field is used for language remark")
     private String remark;
 

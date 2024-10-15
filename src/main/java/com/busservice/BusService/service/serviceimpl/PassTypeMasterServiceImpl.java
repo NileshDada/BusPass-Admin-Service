@@ -112,6 +112,7 @@ public class PassTypeMasterServiceImpl implements PassTypeMasterService {
         passTypeMasterEntity.setPassTypeEndDate(DateTimeUtils.convertStringToInstant(passTypeMasterCreateRequest.getPassTypeEndDate()));
         passTypeMasterEntity.setPassTypeCollectionLocation(passTypeMasterCreateRequest.getPassTypeCollectionLocation());
         passTypeMasterEntity.setPassTypeAmount(passTypeMasterCreateRequest.getPassTypeAmount());
+        passTypeMasterEntity.setPassTypeAgeLimit(passTypeMasterCreateRequest.getPassTypeAgeLimit());
         passTypeMasterEntity.setRemark(passTypeMasterCreateRequest.getRemark());
         passTypeMasterEntity.setStatusCd(passTypeMasterCreateRequest.getStatusCd());
         passTypeMasterEntity.setCreatedUserId(passTypeMasterCreateRequest.getEmployeeId());

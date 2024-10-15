@@ -55,6 +55,7 @@ create table bus_stop_master(
                                     pass_type_end_date timestamp,
                                     pass_type_collection_location VARCHAR(440),
                                     pass_type_amount VARCHAR(140),
+                                    pass_type_age_limit VARCHAR(40),
                                     remark VARCHAR(200),
                                     status_cd VARCHAR(10),
                                     crte_user_id VARCHAR(20) ,
@@ -76,3 +77,13 @@ create table pass_type_document_master(
             lst_updt_user_id VARCHAR(20) null
         );
 
+ create table role_master(
+        ROLE_ID serial  PRIMARY key,
+        ROLE_NAME VARCHAR(30),
+        REMARK VARCHAR(100),
+        STATUS_CD VARCHAR(10),
+        crte_user_id VARCHAR(20) ,
+        crte_ts TIMESTAMP not null DEFAULT CURRENT_TIMESTAMP,
+        lst_updt_ts TIMESTAMP null,
+        lst_updt_user_id VARCHAR(20) null
+    );

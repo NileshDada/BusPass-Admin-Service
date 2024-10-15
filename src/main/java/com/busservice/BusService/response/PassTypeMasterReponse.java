@@ -1,5 +1,6 @@
 package com.busservice.BusService.response;
 
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -19,6 +20,7 @@ public class PassTypeMasterReponse {
     private String passTypeEndDate;
     private String passTypeCollectionLocation;
     private String passTypeAmount;
+    private String passTypeAgeLimit;
     private String remark;
     private String statusCd;
 
@@ -29,7 +31,8 @@ public class PassTypeMasterReponse {
         passTypeEndDate=String.valueOf(objects[3]);
         passTypeCollectionLocation=String.valueOf(objects[4]);
         passTypeAmount=String.valueOf(objects[5]);
-        remark=String.valueOf(objects[6]);
-        statusCd=String.valueOf(objects[7]);
+        passTypeAgeLimit=String.valueOf(objects[6]);
+        remark=String.valueOf(objects[7]);
+        statusCd=String.valueOf(objects[8]);
     }
 }

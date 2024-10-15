@@ -91,6 +91,7 @@ public class PassTypeDocumentMasterServiceImpl implements PassTypeDocumentMaster
                 documentMasterReponse.setPassTypeDescription(masterDtoListEntry.getKey().getPassTypeDescription());
                 documentMasterReponse.setPassTypeEndDate(masterDtoListEntry.getKey().getPassTypeEndDate());
                 documentMasterReponse.setPassTypeAmount(masterDtoListEntry.getKey().getPassTypeAmount());
+                documentMasterReponse.setPassTypeAgeLimit(masterDtoListEntry.getKey().getPassTypeAgeLimit());
                 documentMasterReponse.setPassTypeCollectionLocation(masterDtoListEntry.getKey().getPassTypeCollectionLocation());
                 documentMasterReponse.setDocumentMasterReponses(masterDtoListEntry.getValue());
                 passTypeDocumentMasterReponseList.add(documentMasterReponse);

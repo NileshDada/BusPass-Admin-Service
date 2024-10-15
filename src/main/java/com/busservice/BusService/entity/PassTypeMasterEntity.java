@@ -1,5 +1,6 @@
 package com.busservice.BusService.entity;
 
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -38,6 +39,10 @@ public class PassTypeMasterEntity extends AuditEnabledEntity {
 
     @Column(name = "pass_type_amount")
     private String passTypeAmount;
+
+    @Column(name = "pass_type_age_limit")
+    private String passTypeAgeLimit;
+
 
     @Column(name = "remark")
     private String remark;

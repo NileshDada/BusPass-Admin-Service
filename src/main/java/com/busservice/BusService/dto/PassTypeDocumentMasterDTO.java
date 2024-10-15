@@ -23,8 +23,9 @@ public class PassTypeDocumentMasterDTO {
         passTypeMasterReponse.setPassTypeEndDate(String.valueOf(objects[3]));
         passTypeMasterReponse.setPassTypeCollectionLocation(String.valueOf(objects[4]));
         passTypeMasterReponse.setPassTypeAmount(String.valueOf(objects[5]));
+        passTypeMasterReponse.setPassTypeAgeLimit(String.valueOf(objects[6]));
 
-        documentMasterReponse.setDocId(Integer.parseInt(String.valueOf(objects[6])));
-        documentMasterReponse.setDocName(String.valueOf(objects[7]));
+        documentMasterReponse.setDocId(Integer.parseInt(String.valueOf(objects[7])));
+        documentMasterReponse.setDocName(String.valueOf(objects[8]));
     }
 }

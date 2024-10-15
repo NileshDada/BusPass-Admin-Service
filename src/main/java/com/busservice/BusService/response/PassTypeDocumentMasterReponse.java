@@ -18,5 +18,6 @@ public class PassTypeDocumentMasterReponse {
     private String passTypeEndDate;
     private String passTypeCollectionLocation;
     private String passTypeAmount;
+    private String passTypeAgeLimit;
     List<DocumentMasterReponse> documentMasterReponses;
 }
