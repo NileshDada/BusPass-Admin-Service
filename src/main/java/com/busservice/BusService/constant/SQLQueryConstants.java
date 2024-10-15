@@ -23,5 +23,6 @@ public final class SQLQueryConstants {
     public static final String ROLE_MASTER_DETAILS_BY_PAGING = "select role_id, role_name, remark, status_cd from role_master where role_id = coalesce(:roleId, role_id) and role_name = coalesce(:roleName, role_name) and status_cd = coalesce(:statusCd, status_cd) order by :sortName asc limit :pageSize offset :pageOffset";
     public static final String ROLE_MASTER_DETAILS_BY_PAGING_COUNT = "select count(*) from role_master where role_id = coalesce(:roleId, role_id) and role_name = coalesce(:roleName,role_name) and status_cd = coalesce(:statusCd, status_cd)";
 
+    public static final String CUSTOMER_MASTER_DETAILS_BY_PAGING = "select cust_id, cust_first_name,cust_middle_name,cust_last_name,cust_address,cust_mobile_no,cust_email_id,cust_gender,cust_dob,remark, status_cd from customer_master where cust_id = coalesce(:custId, cust_id) and cust_first_name = coalesce(:custFirstName, cust_first_name) and status_cd = coalesce(:statusCd, status_cd) order by :sortName asc limit :pageSize offset :pageOffset";
+    public static final String CUSTOMER_MASTER_DETAILS_BY_PAGING_COUNT = "select count(*) from customer_master where cust_id = coalesce(:custId, cust_id) and cust_first_name = coalesce(:custFirstName, cust_first_name) and status_cd = coalesce(:statusCd, status_cd)";
 }
-

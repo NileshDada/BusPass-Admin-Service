@@ -87,3 +87,27 @@ create table pass_type_document_master(
         lst_updt_ts TIMESTAMP null,
         lst_updt_user_id VARCHAR(20) null
     );
+
+
+create table customer_master(
+cust_id serial  PRIMARY key,
+cust_first_name VARCHAR(200),
+cust_middle_name VARCHAR(200),
+cust_last_name VARCHAR(200),
+cust_address VARCHAR(500),
+cust_photo bytea,
+cust_mobile_no VARCHAR(20),
+cust_email_id VARCHAR(120),
+cust_gender VARCHAR(20),
+cust_dob timestamp,
+cust_login_user_name VARCHAR(20),
+cust_login_password VARCHAR(20),
+roleId Integer,
+cust_status VARCHAR(20),
+remark VARCHAR(200),
+status_cd VARCHAR(10),
+crte_user_id VARCHAR(20) ,
+crte_ts TIMESTAMP not null DEFAULT CURRENT_TIMESTAMP,
+lst_updt_ts TIMESTAMP null,
+lst_updt_user_id VARCHAR(20) null
+);
