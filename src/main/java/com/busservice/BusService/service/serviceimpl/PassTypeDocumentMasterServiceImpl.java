@@ -1,6 +1,7 @@
 package com.busservice.BusService.service.serviceimpl;
 
 import com.busservice.BusService.constant.BusPassConstant;
+import com.busservice.BusService.dto.PassTypeDocumentMasterDTO;
 import com.busservice.BusService.entity.BusStopMasterEntity;
 import com.busservice.BusService.entity.PassTypeDocumentMasterEntity;
 import com.busservice.BusService.entity.PassTypeMasterEntity;
@@ -10,6 +11,7 @@ import com.busservice.BusService.repository.PassTypeMasterRepo;
 import com.busservice.BusService.request.PassTypeDocumentMasterCreateRequest;
 import com.busservice.BusService.request.PassTypeMasterCreateRequest;
 import com.busservice.BusService.response.BusPassResponse;
+import com.busservice.BusService.response.DocumentMasterReponse;
 import com.busservice.BusService.response.PassTypeDocumentMasterReponse;
 import com.busservice.BusService.response.PassTypeMasterReponse;
 import com.busservice.BusService.service.PassTypeDocumentMasterService;
@@ -23,7 +25,9 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
@@ -60,6 +64,8 @@ public class PassTypeDocumentMasterServiceImpl implements PassTypeDocumentMaster
     public BusPassResponse findPassTypeDocumentDetails(Integer passTypeDocId, Integer passTypeId, String statusCd, Pageable requestPageable) {
         try {
             log.debug("passTypeDocId : {}", passTypeDocId);
+            List<PassTypeDocumentMasterReponse> passTypeDocumentMasterReponseList = new ArrayList<>();
+            PassTypeDocumentMasterReponse documentMasterReponse = null;
             String sortName = null;
             //  String sortDirection = null;
             Integer pageSize = requestPageable.getPageSize();
@@ -73,11 +79,27 @@ public class PassTypeDocumentMasterServiceImpl implements PassTypeDocumentMaster
 
             Integer totalCount = passTypeDocumentMasterRepo.getPassTypeDocumentMasterDetailsCount(passTypeDocId, passTypeId, statusCd);
             List<Object[]> passTypeMasterData = passTypeDocumentMasterRepo.getPassTypeDocumentMasterDetail(passTypeDocId, passTypeId, statusCd, sortName, pageSize, pageOffset);
-            List<PassTypeDocumentMasterReponse> passTypeMasterReponses = passTypeMasterData.stream().map(PassTypeDocumentMasterReponse::new).collect(Collectors.toList());
-            if (passTypeMasterReponses.size() > 0) {
+            List<PassTypeDocumentMasterDTO> passTypeDocumentMasterDTOS = passTypeMasterData.stream().map(PassTypeDocumentMasterDTO::new).collect(Collectors.toList());
+
+            Map<PassTypeMasterReponse, List<DocumentMasterReponse>> passTypeMasterReponseListMap =
+                    passTypeDocumentMasterDTOS.stream().collect(Collectors.groupingBy(PassTypeDocumentMasterDTO::getPassTypeMasterReponse, Collectors.mapping(PassTypeDocumentMasterDTO::getDocumentMasterReponse, Collectors.toList())));
+
+            for (Map.Entry<PassTypeMasterReponse, List<DocumentMasterReponse>> masterDtoListEntry : passTypeMasterReponseListMap.entrySet()) {
+                documentMasterReponse = new PassTypeDocumentMasterReponse();
+                documentMasterReponse.setPassTypeId(masterDtoListEntry.getKey().getPassTypeId());
+                documentMasterReponse.setPassTypeName(masterDtoListEntry.getKey().getPassTypeName());
+                documentMasterReponse.setPassTypeDescription(masterDtoListEntry.getKey().getPassTypeDescription());
+                documentMasterReponse.setPassTypeEndDate(masterDtoListEntry.getKey().getPassTypeEndDate());
+                documentMasterReponse.setPassTypeAmount(masterDtoListEntry.getKey().getPassTypeAmount());
+                documentMasterReponse.setPassTypeCollectionLocation(masterDtoListEntry.getKey().getPassTypeCollectionLocation());
+                documentMasterReponse.setDocumentMasterReponses(masterDtoListEntry.getValue());
+                passTypeDocumentMasterReponseList.add(documentMasterReponse);
+
+            }
+            if (passTypeDocumentMasterReponseList.size() > 0) {
                 return BusPassResponse.builder()
                         .isSuccess(true)
-                        .responseData(new PageImpl<>(passTypeMasterReponses, requestPageable, totalCount))
+                        .responseData(new PageImpl<>(passTypeDocumentMasterReponseList, requestPageable, totalCount))
                         .build();
             }
         } catch (Exception ex) {
