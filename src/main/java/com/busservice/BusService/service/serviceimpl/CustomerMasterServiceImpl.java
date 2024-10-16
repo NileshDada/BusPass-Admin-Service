@@ -11,6 +11,7 @@ import com.busservice.BusService.request.CustomerMasterCreateRequest;
 import com.busservice.BusService.response.BusPassResponse;
 import com.busservice.BusService.response.BusStopMasterReponse;
 import com.busservice.BusService.response.CustomerMasterReponse;
+import com.busservice.BusService.response.LoginResponse;
 import com.busservice.BusService.service.CustomerMasterService;
 import com.busservice.BusService.utils.DateTimeUtils;
 import lombok.extern.slf4j.Slf4j;
@@ -104,6 +105,30 @@ public class CustomerMasterServiceImpl implements CustomerMasterService {
 
     }
 
+    @Override
+    public BusPassResponse customerLoginDetails(String userName, String userPassword) {
+        List<Object[]> employeeLogin = customerMasterRepo.customerLogin(userName, userPassword);
+        List<LoginResponse> loginResponses = employeeLogin.stream().map(LoginResponse::new).collect(Collectors.toList());
+        BusPassResponse response = new BusPassResponse();
+        if (!loginResponses.isEmpty()) {
+
+
+                log.info("Login successfully");
+                response= BusPassResponse.builder()
+                        .isSuccess(true)
+                        .responseData(loginResponses.get(0))
+                        .responseMessage("Login successfully")
+                        .build();
+
+        } else {
+            log.error("Inside EmployeeLoginServiceImpl >> employeeLogin()");
+            response= BusPassResponse.builder()
+                    .isSuccess(false)
+                    .responseMessage("User name or Password is not correct. Please try again")
+                    .build();
+        }
+        return response;
+    }
 
 
     private CustomerMasterEntity convertCustomerMasterCreateRequestToEntity(CustomerMasterCreateRequest masterCreateRequest) {

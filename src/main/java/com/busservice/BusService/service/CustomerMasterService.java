@@ -12,4 +12,6 @@ public interface CustomerMasterService {
     public BusPassResponse findCustomerMasterDetails(Integer custId, String custFirstName, String statusCd, Pageable pageable);
 
     public BusPassResponse deleteCustomerMasterDetails(Integer custId);
+
+    public BusPassResponse customerLoginDetails(String custId, String custName);
 }

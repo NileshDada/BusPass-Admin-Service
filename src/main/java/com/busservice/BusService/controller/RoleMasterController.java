@@ -3,6 +3,7 @@ package com.busservice.BusService.controller;
 import com.busservice.BusService.response.BusPassResponse;
 import com.busservice.BusService.service.RoleMasterService;
 import io.swagger.v3.oas.annotations.Parameter;
+import lombok.extern.slf4j.Slf4j;
 import org.springdoc.core.converters.models.PageableAsQueryParam;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
@@ -17,6 +18,7 @@ import org.springframework.web.bind.annotation.RestController;
 @CrossOrigin
 @RestController
 @RequestMapping(value = "/roles")
+@Slf4j
 public class RoleMasterController {
 
     @Autowired
@@ -29,6 +31,7 @@ public class RoleMasterController {
                                                            @RequestParam(required = false) String routesName,
                                                            @RequestParam(required = false) String statusCd,
                                                            @Parameter(hidden = true) Pageable pageable) {
+        log.info("Inside RoleMasterController >> findRoleDetails()");
         BusPassResponse response = roleService.findRoleDetails(routesId, routesName, statusCd, pageable);
         return new ResponseEntity<>(response, HttpStatus.OK);
 

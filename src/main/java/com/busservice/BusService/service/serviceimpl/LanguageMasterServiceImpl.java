@@ -5,6 +5,7 @@ import com.busservice.BusService.entity.LanguageMasterEntity;
 import com.busservice.BusService.exception.BusPassException;
 import com.busservice.BusService.repository.LanguageMasterRepo;
 import com.busservice.BusService.request.LanguageMasterCreateRequest;
+import com.busservice.BusService.request.LanguageMasterUpdateRequest;
 import com.busservice.BusService.response.BusPassResponse;
 import com.busservice.BusService.response.LanguageMasterReponse;
 import com.busservice.BusService.response.dropdown.LanguageMasterDD;
@@ -17,7 +18,6 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -52,6 +52,25 @@ public class LanguageMasterServiceImpl implements LanguageMasterService {
         }
     }
 
+    @Transactional
+    @Override
+    public BusPassResponse updateLanguageMaster(LanguageMasterUpdateRequest languageMasterUpdateRequest) {
+
+        BusPassResponse busPassResponse = new BusPassResponse();
+        try {
+            languageMasterRepo.updateLanguageMasterDetails(languageMasterUpdateRequest.getLangId(), languageMasterUpdateRequest.getLangName(), languageMasterUpdateRequest.getRemark(), languageMasterUpdateRequest.getEmployeeId());
+            busPassResponse.setSuccess(true);
+            busPassResponse.setResponseMessage("Language updated successfully");
+            return busPassResponse;
+        } catch (Exception ex) {
+            log.error("Inside LanguageMasterServiceImpl >> updateLanguageMaster : {}", ex);
+            return BusPassResponse.builder()
+                    .isSuccess(false)
+                    .build();
+        }
+
+    }
+
     @Override
     public BusPassResponse findLanguageMasterDetails(Integer langId, String langName, String statusCd, Pageable requestPageable) {
         try {
@@ -82,6 +101,21 @@ public class LanguageMasterServiceImpl implements LanguageMasterService {
         return BusPassResponse.builder()
                 .isSuccess(false)
                 .build();
+    }
+
+    @Override
+    public LanguageMasterReponse findLanguageMasterByLangId(Integer langId) {
+        try {
+            List<Object[]> languageMasterData = languageMasterRepo.getLanguageMasterByLangId(langId);
+            List<LanguageMasterReponse> languageMasterReponses = languageMasterData.stream().map(LanguageMasterReponse::new).collect(Collectors.toList());
+            if (languageMasterReponses.size() > 0) {
+                return languageMasterReponses.get(0);
+            }
+        } catch (Exception ex) {
+            log.error("LanguageMasterServiceImpl >>findLanguageMasterByLangId() : {}", ex);
+            throw new BusPassException("LanguageMasterServiceImpl", false, ex.getMessage());
+        }
+        return null;
     }
 
     @Transactional

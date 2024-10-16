@@ -2,6 +2,7 @@ package com.busservice.BusService.controller;
 
 
 import com.busservice.BusService.request.LanguageMasterCreateRequest;
+import com.busservice.BusService.request.LanguageMasterUpdateRequest;
 import com.busservice.BusService.response.BusPassResponse;
 import com.busservice.BusService.response.LanguageMasterReponse;
 import com.busservice.BusService.response.dropdown.LanguageMasterDD;
@@ -16,6 +17,7 @@ import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -37,6 +39,12 @@ public class LanguageMasterController {
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
+    @PutMapping
+    public ResponseEntity<BusPassResponse> updateLanguageMaster(@RequestBody LanguageMasterUpdateRequest languageMasterUpdateRequest) {
+        BusPassResponse response = languageMasterService.updateLanguageMaster(languageMasterUpdateRequest);
+        return new ResponseEntity<>(response, HttpStatus.OK);
+    }
+
     @GetMapping
     @PageableAsQueryParam
     public ResponseEntity<BusPassResponse> findLanguageMasterDetails(@RequestParam(required = false) Integer langId,
@@ -47,6 +55,16 @@ public class LanguageMasterController {
         BusPassResponse response = languageMasterService.findLanguageMasterDetails(langId, langName, statusCd, pageable);
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
+
+
+    @GetMapping(value = "/by-langid")
+    public ResponseEntity<LanguageMasterReponse> findLanguageMasterByLangId(@RequestParam(required = false) Integer langId) {
+
+        LanguageMasterReponse response = languageMasterService.findLanguageMasterByLangId(langId);
+        return new ResponseEntity<>(response, HttpStatus.OK);
+    }
+
+
 
     @DeleteMapping
     public ResponseEntity<BusPassResponse> deleteLanguageMasterDetails(@RequestParam(required = false) Integer langId) {

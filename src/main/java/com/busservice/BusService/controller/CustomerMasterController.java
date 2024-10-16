@@ -51,4 +51,13 @@ public class CustomerMasterController {
         BusPassResponse response = customerMasterService.deleteCustomerMasterDetails(custId);
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
+
+
+    @GetMapping(value = "/login")
+    public ResponseEntity<BusPassResponse> customerLoginDetails(@RequestParam(required = false) String userName,
+                                                                     @RequestParam(required = false) String userPassword) {
+
+        BusPassResponse response = customerMasterService.customerLoginDetails(userName, userPassword);
+        return new ResponseEntity<>(response, HttpStatus.OK);
+    }
 }

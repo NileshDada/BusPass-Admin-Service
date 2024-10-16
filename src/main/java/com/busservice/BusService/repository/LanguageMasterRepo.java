@@ -26,7 +26,14 @@ public interface LanguageMasterRepo extends JpaRepository<LanguageMasterEntity, 
     @Query(value = "update language_master set status_cd='I' where lang_id =:langId", nativeQuery = true)
     public int deleteLanguageMasterDetails(@Param("langId") Integer langId);
 
+    @Modifying
+    @Query(value = "update language_master set lang_name=:langName,remark=:remark,lst_updt_user_id=:employeeId  where lang_id =:langId", nativeQuery = true)
+    public int updateLanguageMasterDetails(@Param("langId") Integer langId,@Param("langName") String langName,@Param("remark") String remark,@Param("employeeId") String employeeId);
+
     @Query(value = "select lang_id,lang_name from language_master where status_cd ='A'", nativeQuery = true)
     public List<Object[]> findDDLanguageMasterDetails();
+
+    @Query(value = SQLQueryConstants.LANGUAGE_MASTER_DETAILS_BY_LANG_ID, nativeQuery = true)
+    List<Object[]> getLanguageMasterByLangId(@Param("langId") Integer langId);
 
 }

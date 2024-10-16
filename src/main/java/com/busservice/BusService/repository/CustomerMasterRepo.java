@@ -15,6 +15,8 @@ import java.util.Optional;
 @Repository
 public interface CustomerMasterRepo extends JpaRepository<CustomerMasterEntity, Integer> {
 
+    @Query(value = "select cm.cust_id, cm.role_id, rm.role_name, cm.cust_first_name , cm.cust_middle_name, cm.cust_last_name, cm.cust_email_id from customer_master cm, role_master rm where cm.role_id = rm.role_id and cm.cust_login_user_name = :userName and cm.cust_login_password= :userPassword", nativeQuery = true)
+    public List<Object[]> customerLogin(@Param("userName") String userName, @Param("userPassword")String userPassword);
 
 
     @Query(value = SQLQueryConstants.CUSTOMER_MASTER_DETAILS_BY_PAGING, nativeQuery = true)
