@@ -14,6 +14,7 @@ public final class SQLQueryConstants {
 
     public static final String DOCUMENT_MASTER_DETAILS_BY_PAGING = "select doc_id, doc_name, remark, status_cd from document_master where doc_id = coalesce(:docId, doc_id) and doc_name = coalesce(:docName, doc_name) and status_cd = coalesce(:statusCd, status_cd) order by :sortName asc limit :pageSize offset :pageOffset";
     public static final String DOCUMENT_MASTER_DETAILS_BY_PAGING_COUNT = "select count(*) from document_master where doc_id = coalesce(:docId, doc_id) and doc_name = coalesce(:docName, doc_name) and status_cd = coalesce(:statusCd, status_cd)";
+    public static final String DOCUMENT_MASTER_DETAILS_BY_DOC_ID = "select doc_id, doc_name, remark, status_cd from document_master where doc_id = coalesce(:docId, doc_id)";
 
     public static final String PASS_TYPE_MASTER_DETAILS_BY_PAGING = "select pass_type_id, pass_type_name,pass_type_description,pass_type_end_date,pass_type_collection_location,pass_type_amount,pass_type_age_limit, remark, status_cd from pass_type_master where pass_type_id = coalesce(:passTypeId, pass_type_id) and pass_type_name = coalesce(:passTypeName, pass_type_name) and status_cd = coalesce(:statusCd, status_cd) order by :sortName asc limit :pageSize offset :pageOffset";
     public static final String PASS_TYPE_MASTER_DETAILS_BY_PAGING_COUNT = "select count(*) from pass_type_master where pass_type_id = coalesce(:passTypeId, pass_type_id) and pass_type_name = coalesce(:passTypeName, pass_type_name) and status_cd = coalesce(:statusCd, status_cd)";

@@ -7,6 +7,7 @@ import com.busservice.BusService.exception.BusPassException;
 import com.busservice.BusService.repository.DocumentMasterRepo;
 import com.busservice.BusService.repository.LanguageMasterRepo;
 import com.busservice.BusService.request.DocumentMasterCreateRequest;
+import com.busservice.BusService.request.DocumentMasterUpdateRequest;
 import com.busservice.BusService.request.LanguageMasterCreateRequest;
 import com.busservice.BusService.response.BusPassResponse;
 import com.busservice.BusService.response.DocumentMasterReponse;
@@ -56,6 +57,24 @@ public class DocumentMasterServiceImpl implements DocumentMasterService {
         }
     }
 
+    @Transactional
+    @Override
+    public BusPassResponse updateDocumentMaster(DocumentMasterUpdateRequest documentMasterUpdateRequest) {
+
+        BusPassResponse busPassResponse = new BusPassResponse();
+        try {
+            documentMasterRepo.updateDocumentMasterDetails(documentMasterUpdateRequest.getDocId(), documentMasterUpdateRequest.getDocName(), documentMasterUpdateRequest.getRemark(), documentMasterUpdateRequest.getEmployeeId());
+            busPassResponse.setSuccess(true);
+            busPassResponse.setResponseMessage("Document updated successfully");
+            return busPassResponse;
+        } catch (Exception ex) {
+            log.error("Inside DocumentMasterServiceImpl >> updateDocumentMaster : {}", ex);
+            return BusPassResponse.builder()
+                    .isSuccess(false)
+                    .build();
+        }
+    }
+
     @Override
     public BusPassResponse findDocumentMasterDetails(Integer docId, String docName, String statusCd, Pageable requestPageable) {
         try {
@@ -88,12 +107,27 @@ public class DocumentMasterServiceImpl implements DocumentMasterService {
                 .build();
     }
 
+    @Override
+    public DocumentMasterReponse findDocumentMasterById(Integer docId) {
+        try{
+        List<Object[]> documentMasterData = documentMasterRepo.getDocumentMasterDetailByDocId(docId);
+        List<DocumentMasterReponse> documentMasterReponses = documentMasterData.stream().map(DocumentMasterReponse::new).collect(Collectors.toList());
+        if (documentMasterReponses.size() > 0) {
+            return documentMasterReponses.get(0);
+        }
+    } catch (Exception ex) {
+        log.error("DocumentMasterServiceImpl >> findDocumentMasterById : {}", ex);
+        throw new BusPassException("DocumentMasterServiceImpl >> findDocumentMasterById", false, ex.getMessage());
+    }
+        return null;
+    }
+
     @Transactional
     @Override
-    public BusPassResponse deleteDocumentMasterDetails(Integer docId) {
+    public BusPassResponse deleteDocumentMasterDetails(Integer docId, String employeeId) {
         BusPassResponse busPassResponse = new BusPassResponse();
         try {
-            documentMasterRepo.deleteDocumentMasterDetails(docId);
+            documentMasterRepo.deleteDocumentMasterDetails(docId,employeeId);
             busPassResponse.setSuccess(true);
             busPassResponse.setResponseMessage("Document details deleted Successfully");
             return busPassResponse;
