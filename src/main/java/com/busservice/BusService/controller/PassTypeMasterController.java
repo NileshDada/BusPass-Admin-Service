@@ -3,7 +3,9 @@ package com.busservice.BusService.controller;
 
 import com.busservice.BusService.request.BusStopMasterCreateRequest;
 import com.busservice.BusService.request.PassTypeMasterCreateRequest;
+import com.busservice.BusService.request.PassTypeMasterUpdateRequest;
 import com.busservice.BusService.response.BusPassResponse;
+import com.busservice.BusService.response.PassTypeMasterReponse;
 import com.busservice.BusService.service.BusStopMasterService;
 import com.busservice.BusService.service.PassTypeMasterService;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -16,6 +18,7 @@ import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -35,6 +38,12 @@ public class PassTypeMasterController {
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
+    @PutMapping
+    public ResponseEntity<BusPassResponse> updatePassTypeMaster(@RequestBody PassTypeMasterUpdateRequest masterUpdateRequest) {
+        BusPassResponse response = passTypeMasterService.updatePassTypeMaster(masterUpdateRequest);
+        return new ResponseEntity<>(response, HttpStatus.OK);
+    }
+
     @GetMapping
     @PageableAsQueryParam
     public ResponseEntity<BusPassResponse> findPassTypeMasterDetails(@RequestParam(required = false) Integer passTypeId,
@@ -43,6 +52,13 @@ public class PassTypeMasterController {
                                                                      @Parameter(hidden = true) Pageable pageable) {
 
         BusPassResponse response = passTypeMasterService.findPassTypeMasterDetails(passTypeId, passTypeName, statusCd, pageable);
+        return new ResponseEntity<>(response, HttpStatus.OK);
+    }
+
+    @GetMapping(value = "/by-passtypeid")
+    public ResponseEntity<PassTypeMasterReponse> findPassTypeMasterDetailsById(@RequestParam(required = false) Integer passTypeId) {
+
+        PassTypeMasterReponse response = passTypeMasterService.findPassTypeMasterDetailsById(passTypeId);
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 

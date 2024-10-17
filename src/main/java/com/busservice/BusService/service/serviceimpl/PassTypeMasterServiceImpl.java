@@ -6,6 +6,7 @@ import com.busservice.BusService.entity.PassTypeMasterEntity;
 import com.busservice.BusService.exception.BusPassException;
 import com.busservice.BusService.repository.PassTypeMasterRepo;
 import com.busservice.BusService.request.PassTypeMasterCreateRequest;
+import com.busservice.BusService.request.PassTypeMasterUpdateRequest;
 import com.busservice.BusService.response.BusPassResponse;
 import com.busservice.BusService.response.BusStopMasterReponse;
 import com.busservice.BusService.response.PassTypeMasterReponse;
@@ -16,6 +17,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
@@ -52,8 +54,25 @@ public class PassTypeMasterServiceImpl implements PassTypeMasterService {
         }
     }
 
+    @Transactional
     @Override
-    public BusPassResponse findPassTypeMasterDetails(Integer busStopId, String busStopName, String statusCd, Pageable requestPageable) {
+    public BusPassResponse updatePassTypeMaster(PassTypeMasterUpdateRequest masterUpdateRequest) {
+        BusPassResponse busPassResponse = new BusPassResponse();
+        try {
+            passTypeMasterRepo.updatePassTypeMasterDetails(masterUpdateRequest.getPassTypeId(), masterUpdateRequest.getPassTypeName(),masterUpdateRequest.getPassTypeDescription(),DateTimeUtils.convertStringToInstant(masterUpdateRequest.getPassTypeEndDate()),masterUpdateRequest.getPassTypeCollectionLocation(),masterUpdateRequest.getPassTypeAmount(),masterUpdateRequest.getPassTypeAgeLimit(), masterUpdateRequest.getRemark(), masterUpdateRequest.getEmployeeId());
+            busPassResponse.setSuccess(true);
+            busPassResponse.setResponseMessage("Pass Type updated successfully");
+            return busPassResponse;
+        } catch (Exception ex) {
+            log.error("Inside DocumentMasterServiceImpl >> updatePassTypeMaster : {}", ex);
+            return BusPassResponse.builder()
+                    .isSuccess(false)
+                    .build();
+        }
+    }
+
+    @Override
+    public BusPassResponse findPassTypeMasterDetails(Integer passTypeId, String passTypeName, String statusCd, Pageable requestPageable) {
         try {
             String sortName = null;
             //  String sortDirection = null;
@@ -66,8 +85,8 @@ public class PassTypeMasterServiceImpl implements PassTypeMasterService {
                 //sortDirection = order.get().getDirection().toString(); // Sort ASC or DESC
             }
 
-            Integer totalCount = passTypeMasterRepo.getPassTypeMasterDetailsCount(busStopId, busStopName, statusCd);
-            List<Object[]> passTypeMasterData = passTypeMasterRepo.getPassTypeMasterDetail(busStopId, busStopName, statusCd, sortName, pageSize, pageOffset);
+            Integer totalCount = passTypeMasterRepo.getPassTypeMasterDetailsCount(passTypeId, passTypeName, statusCd);
+            List<Object[]> passTypeMasterData = passTypeMasterRepo.getPassTypeMasterDetail(passTypeId, passTypeName, statusCd, sortName, pageSize, pageOffset);
             List<PassTypeMasterReponse> passTypeMasterReponses = passTypeMasterData.stream().map(PassTypeMasterReponse::new).collect(Collectors.toList());
             if (passTypeMasterReponses.size() > 0) {
                 return BusPassResponse.builder()
@@ -82,6 +101,21 @@ public class PassTypeMasterServiceImpl implements PassTypeMasterService {
         return BusPassResponse.builder()
                 .isSuccess(false)
                 .build();
+    }
+
+    @Override
+    public PassTypeMasterReponse findPassTypeMasterDetailsById(Integer passTypeId) {
+        try{
+        List<Object[]> passTypeMasterData = passTypeMasterRepo.getPassTypeMasterDetailById(passTypeId);
+        List<PassTypeMasterReponse> passTypeMasterReponses = passTypeMasterData.stream().map(PassTypeMasterReponse::new).collect(Collectors.toList());
+        if (passTypeMasterReponses.size() > 0) {
+            return passTypeMasterReponses.get(0);
+        }
+    } catch (Exception ex) {
+        log.error("PassTypeMasterServiceImpl >> findPassTypeMasterDetailsById : {}", ex);
+        throw new BusPassException("PassTypeMasterServiceImpl >> findPassTypeMasterDetailsById", false, ex.getMessage());
+    }
+        return null;
     }
 
     @Transactional

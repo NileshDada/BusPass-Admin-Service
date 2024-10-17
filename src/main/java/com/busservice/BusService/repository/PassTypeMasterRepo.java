@@ -9,6 +9,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
+import java.time.Instant;
 import java.util.List;
 import java.util.Optional;
 
@@ -26,4 +27,11 @@ public interface PassTypeMasterRepo extends JpaRepository<PassTypeMasterEntity, 
     @Modifying
     @Query(value = "update pass_type_master set status_cd='I' where pass_type_id =:passTypeId", nativeQuery = true)
     public int deletePassTypeMasterDetails(@Param("passTypeId") Integer passTypeId);
+
+    @Query(value = SQLQueryConstants.PASS_TYPE_MASTER_DETAILS_BY_ID, nativeQuery = true)
+    List<Object[]> getPassTypeMasterDetailById(@Param("passTypeId") Integer passTypeId);
+
+    @Modifying
+    @Query(value = "update pass_type_master set pass_type_name=:passTypeName,pass_type_description=:passTypeDescription,pass_type_end_date=:passTypeEndDate,pass_type_collection_location=:passTypeCollectionLocation,pass_type_amount=:passTypeAmount,pass_type_age_limit=:passTypeAgeLimit,remark=:remark,lst_updt_user_id=:employeeId  where pass_type_id =:passTypeId", nativeQuery = true)
+    public int updatePassTypeMasterDetails(@Param("passTypeId") Integer passTypeId, @Param("passTypeName") String passTypeName, @Param("passTypeDescription") String passTypeDescription, @Param("passTypeEndDate") Instant passTypeEndDate, @Param("passTypeCollectionLocation") String passTypeCollectionLocation, @Param("passTypeAmount") String passTypeAmount, @Param("passTypeAgeLimit") String passTypeAgeLimit, @Param("remark") String remark, @Param("employeeId") String employeeId);
 }

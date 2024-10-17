@@ -3,11 +3,11 @@ package com.busservice.BusService.request;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 
-import java.time.Instant;
-
 @Data
-public class PassTypeMasterCreateRequest {
+public class PassTypeMasterUpdateRequest {
 
+    @Schema(example = "1", description = "This field is used for routes id")
+    private Integer passTypeId;
 
     @Schema(example = "Monthly Pass", description = "This field is used for bus stop name")
     private String passTypeName;
