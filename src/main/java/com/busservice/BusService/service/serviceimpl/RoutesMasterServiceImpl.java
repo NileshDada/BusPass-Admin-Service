@@ -8,6 +8,7 @@ import com.busservice.BusService.repository.LanguageMasterRepo;
 import com.busservice.BusService.repository.RoutesMasterRepo;
 import com.busservice.BusService.request.LanguageMasterCreateRequest;
 import com.busservice.BusService.request.RoutesMasterCreateRequest;
+import com.busservice.BusService.request.RoutesMasterUpdateRequest;
 import com.busservice.BusService.response.BusPassResponse;
 import com.busservice.BusService.response.LanguageMasterReponse;
 import com.busservice.BusService.response.RoutesMasterReponse;
@@ -55,6 +56,23 @@ public class RoutesMasterServiceImpl implements RoutesMasterService {
         }
     }
 
+    @Transactional
+    @Override
+    public BusPassResponse updateRoutesMaster(RoutesMasterUpdateRequest masterUpdateRequest) {
+        BusPassResponse busPassResponse = new BusPassResponse();
+        try {
+            routesMasterRepo.updateRoutesMasterDetails(masterUpdateRequest.getRoutesId(), masterUpdateRequest.getRoutesName(),masterUpdateRequest.getRoutesStartLocation(),masterUpdateRequest.getRoutesEndLocation(), masterUpdateRequest.getRemark(), masterUpdateRequest.getEmployeeId());
+            busPassResponse.setSuccess(true);
+            busPassResponse.setResponseMessage("Language updated successfully");
+            return busPassResponse;
+        } catch (Exception ex) {
+            log.error("Inside LanguageMasterServiceImpl >> updateLanguageMaster : {}", ex);
+            return BusPassResponse.builder()
+                    .isSuccess(false)
+                    .build();
+        }
+    }
+
     @Override
     public BusPassResponse findRoutesMasterDetails(Integer routesId, String routesName, String statusCd, Pageable requestPageable) {
         try {
@@ -85,6 +103,21 @@ public class RoutesMasterServiceImpl implements RoutesMasterService {
         return BusPassResponse.builder()
                 .isSuccess(false)
                 .build();
+    }
+
+    @Override
+    public RoutesMasterReponse findRoutesMasterDetailsById(Integer routesId) {
+        try{
+            List<Object[]> languageMasterData = routesMasterRepo.getRoutesMasterDetailById(routesId);
+            List<RoutesMasterReponse> routesMasterReponses = languageMasterData.stream().map(RoutesMasterReponse::new).collect(Collectors.toList());
+            if (routesMasterReponses.size() > 0) {
+                return routesMasterReponses.get(0);
+            }
+        } catch (Exception ex) {
+            log.error("RoutesMasterServiceImpl >> findRoutesMasterDetailsById() : {}", ex);
+            throw new BusPassException("RoutesMasterServiceImpl>> findRoutesMasterDetailsById()", false, ex.getMessage());
+        }
+        return null;
     }
 
     @Transactional
