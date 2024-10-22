@@ -8,6 +8,7 @@ import com.busservice.BusService.repository.BusStopMasterRepo;
 import com.busservice.BusService.repository.CustomerMasterRepo;
 import com.busservice.BusService.request.BusStopMasterCreateRequest;
 import com.busservice.BusService.request.CustomerMasterCreateRequest;
+import com.busservice.BusService.request.CustomerMasterUpdateRequest;
 import com.busservice.BusService.response.BusPassResponse;
 import com.busservice.BusService.response.BusStopMasterReponse;
 import com.busservice.BusService.response.CustomerMasterReponse;
@@ -16,6 +17,7 @@ import com.busservice.BusService.service.CustomerMasterService;
 import com.busservice.BusService.utils.DateTimeUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
@@ -33,6 +35,8 @@ public class CustomerMasterServiceImpl implements CustomerMasterService {
     @Autowired
     private CustomerMasterRepo customerMasterRepo;
 
+    @Value("${customer-max-number}")
+    private Integer customerMaxNumber;
 
     @Override
     public BusPassResponse saveCustomerMaster(CustomerMasterCreateRequest masterCreateRequest) {
@@ -55,6 +59,23 @@ public class CustomerMasterServiceImpl implements CustomerMasterService {
         }
     }
 
+    @Transactional
+    @Override
+    public BusPassResponse updateCustomerMaster(CustomerMasterUpdateRequest masterUpdateRequest) {
+        BusPassResponse busPassResponse = new BusPassResponse();
+        try {
+            customerMasterRepo.updateDocumentMasterDetails(masterUpdateRequest.getCustId(),masterUpdateRequest.getCustFirstName(),masterUpdateRequest.getCustMiddleName(),masterUpdateRequest.getCustLastName(),masterUpdateRequest.getCustAddress(),masterUpdateRequest.getCustMobileNo(),masterUpdateRequest.getCustEmailId(),masterUpdateRequest.getCustGender(),DateTimeUtils.convertStringToInstant(masterUpdateRequest.getCustDateOfBirth()), masterUpdateRequest.getRemark(), masterUpdateRequest.getEmployeeId());
+            busPassResponse.setSuccess(true);
+            busPassResponse.setResponseMessage("Customer details updated successfully");
+            return busPassResponse;
+        } catch (Exception ex) {
+            log.error("Inside DocumentMasterServiceImpl >> updateDocumentMaster : {}", ex);
+            return BusPassResponse.builder()
+                    .isSuccess(false)
+                    .build();
+        }
+    }
+
     @Override
     public BusPassResponse findCustomerMasterDetails(Integer custId, String custName, String statusCd, Pageable requestPageable) {
         try {
@@ -70,8 +91,8 @@ public class CustomerMasterServiceImpl implements CustomerMasterService {
             }
 
             Integer totalCount = customerMasterRepo.getCustomerMasterDetailsCount(custId, custName, statusCd);
-            List<Object[]> languageMasterData = customerMasterRepo.getCustomerMasterDetail(custId, custName, statusCd, sortName, pageSize, pageOffset);
-            List<CustomerMasterReponse> customerMasterReponses = languageMasterData.stream().map(CustomerMasterReponse::new).collect(Collectors.toList());
+            List<Object[]> customerMasterData = customerMasterRepo.getCustomerMasterDetail(custId, custName, statusCd, sortName, pageSize, pageOffset);
+            List<CustomerMasterReponse> customerMasterReponses = customerMasterData.stream().map(CustomerMasterReponse::new).collect(Collectors.toList());
             if (customerMasterReponses.size() > 0) {
                 return BusPassResponse.builder()
                         .isSuccess(true)
@@ -85,6 +106,21 @@ public class CustomerMasterServiceImpl implements CustomerMasterService {
         return BusPassResponse.builder()
                 .isSuccess(false)
                 .build();
+    }
+
+    @Override
+    public CustomerMasterReponse findCustomerMasterDetailsById(Integer custId) {
+        try{
+        List<Object[]> languageMasterData = customerMasterRepo.getCustomerMasterDetailById(custId);
+        List<CustomerMasterReponse> customerMasterReponses = languageMasterData.stream().map(CustomerMasterReponse::new).collect(Collectors.toList());
+        if (customerMasterReponses.size() > 0) {
+            return customerMasterReponses.get(0);
+        }
+    } catch (Exception ex) {
+        log.error("CustomerMasterServiceImpl >> findCustomerMasterDetailsById : {}", ex);
+        throw new BusPassException("CustomerMasterServiceImpl >> findCustomerMasterDetailsById", false, ex.getMessage());
+    }
+        return null;
     }
 
     @Transactional
@@ -109,23 +145,20 @@ public class CustomerMasterServiceImpl implements CustomerMasterService {
     public BusPassResponse customerLoginDetails(String userName, String userPassword) {
         List<Object[]> employeeLogin = customerMasterRepo.customerLogin(userName, userPassword);
         List<LoginResponse> loginResponses = employeeLogin.stream().map(LoginResponse::new).collect(Collectors.toList());
-        BusPassResponse response = new BusPassResponse();
+        BusPassResponse response =null;
         if (!loginResponses.isEmpty()) {
-
-
                 log.info("Login successfully");
-                response= BusPassResponse.builder()
-                        .isSuccess(true)
-                        .responseData(loginResponses.get(0))
-                        .responseMessage("Login successfully")
-                        .build();
+                response = new BusPassResponse();
+                response.setSuccess(true);
+                response.setResponseMessage("Login successfully");
+                response.setResponseData(loginResponses.get(0));
+
 
         } else {
             log.error("Inside EmployeeLoginServiceImpl >> employeeLogin()");
-            response= BusPassResponse.builder()
-                    .isSuccess(false)
-                    .responseMessage("User name or Password is not correct. Please try again")
-                    .build();
+            response= new BusPassResponse();
+            response.setSuccess(false);
+                response.setResponseMessage("User name or Password is not correct. Please try again");
         }
         return response;
     }
@@ -133,7 +166,7 @@ public class CustomerMasterServiceImpl implements CustomerMasterService {
 
     private CustomerMasterEntity convertCustomerMasterCreateRequestToEntity(CustomerMasterCreateRequest masterCreateRequest) {
         CustomerMasterEntity customerMasterEntity = new CustomerMasterEntity();
-
+        String customerLoginUserName = "CUST" + getRandomNumber();
         customerMasterEntity.setCustFirstName(masterCreateRequest.getCustFirstName());
         customerMasterEntity.setCustMiddleName(masterCreateRequest.getCustMiddleName());
         customerMasterEntity.setCustLastName(masterCreateRequest.getCustLastName());
@@ -142,13 +175,17 @@ public class CustomerMasterServiceImpl implements CustomerMasterService {
         customerMasterEntity.setCustMobileNo(masterCreateRequest.getCustMobileNo());
         customerMasterEntity.setCustEmailId(masterCreateRequest.getCustEmailId());
         customerMasterEntity.setCustDateOfBirth(DateTimeUtils.convertStringToInstant(masterCreateRequest.getCustDateOfBirth()));
-        customerMasterEntity.setCustLoginUserName(masterCreateRequest.getCustLoginUserName());
-        customerMasterEntity.setCustLoginUserPassword(masterCreateRequest.getCustLoginUserPassword());
+        customerMasterEntity.setCustLoginUserName(customerLoginUserName);
+        customerMasterEntity.setCustLoginUserPassword(customerLoginUserName);
         customerMasterEntity.setRoleId(1);
         customerMasterEntity.setCustStatus("Pending");
         customerMasterEntity.setRemark(masterCreateRequest.getRemark());
         customerMasterEntity.setStatusCd(masterCreateRequest.getStatusCd());
         customerMasterEntity.setCreatedUserId(masterCreateRequest.getEmployeeId());
         return customerMasterEntity;
+    }
+
+    private Integer getRandomNumber() {
+        return (int) (Math.random() * customerMaxNumber);
     }
 }

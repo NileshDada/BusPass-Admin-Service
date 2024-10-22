@@ -1,20 +1,13 @@
 package com.busservice.BusService.request;
 
-import com.busservice.BusService.entity.AuditEnabledEntity;
 import io.swagger.v3.oas.annotations.media.Schema;
-import lombok.AllArgsConstructor;
 import lombok.Data;
-import lombok.NoArgsConstructor;
-
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.Table;
 
 @Data
-public class CustomerMasterCreateRequest {
+public class CustomerMasterUpdateRequest {
+
+    @Schema(example = "1", description = "This field is used for Customer Id")
+    private Integer custId;
 
     @Schema(example = "Nilesh", description = "This field is used for Customer First Name")
     private String custFirstName;

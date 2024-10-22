@@ -22,7 +22,6 @@ public class CustomerMasterReponse {
     private String custGender;
     private String custDateOfBirth;
     private String custLoginUserName;
-    private String custLoginUserPassword;
     private String remark;
     private String statusCd;
 
@@ -36,7 +35,8 @@ public class CustomerMasterReponse {
         this.custEmailId = String.valueOf(objects[6]);
         this.custGender = String.valueOf(objects[7]);
         this.custDateOfBirth = String.valueOf(objects[8]);
-        this.remark = String.valueOf(objects[9]);
-        this.statusCd = String.valueOf(objects[10]);
+        this.custLoginUserName=String.valueOf(objects[9]);
+        this.remark = String.valueOf(objects[10]);
+        this.statusCd = String.valueOf(objects[11]);
     }
 }
