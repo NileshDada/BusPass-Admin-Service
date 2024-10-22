@@ -12,11 +12,6 @@ public class StudentPassMasterCreateRequest {
     @Schema(example = "1", description = "This field is used for Student pass type Id")
     private Integer passTypeId;
 
-    @Schema(example = "2024-10-10", description = "This field is used for Student pass start date")
-    private String studPassCreatedDate;
-
-    @Schema(example = "2024-10-10", description = "This field is used for Student pass expiry dates")
-    private String studPassExpiryDate;
 
     @Schema(example = "1", description = "This field is used for Student start bus stop id")
     private Integer routesId;
@@ -30,20 +25,17 @@ public class StudentPassMasterCreateRequest {
     @Schema(example = "400", description = "This field is used for Student pass amount")
     private String studPassAmount;
 
-    @Schema(example = "Pending", description = "This field is used for Student pass amount paid status")
-    private String studPassAmountPaidStatus;
-
     @Schema(example = "VVPS", description = "This field is used for everyday school name")
     private String studSchoolName;
 
     @Schema(example = "Pune", description = "This field is used for school address")
-    private String studSchoolAddresss;
+    private String schoolAddresss;
 
     @Schema(example = "Yes", description = "This field is used for  school autonomous")
-    private String studSchoolAutonomus;
+    private String schoolAutonomus;
 
     @Schema(example = "UDI122", description = "This field is used for  school udise no")
-    private String studSchoolUdiseNo;
+    private String schoolIdentificationNumber;
 
     @Schema(example = "2024-10-10", description = "This field is used for everyday school start timing")
     private String schoolEveryDayStartTiming;

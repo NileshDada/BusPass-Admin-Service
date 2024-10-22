@@ -54,6 +54,9 @@ public class StudentPassMasterEntity extends AuditEnabledEntity {
     @Column(name = "stud_pass_amount_paid_status")
     private String studPassAmountPaidStatus;
 
+    @Column(name = "school_id")
+    private Integer schoolId;
+
     @Column(name = "school_name")
     private String schoolName;
 
@@ -63,8 +66,8 @@ public class StudentPassMasterEntity extends AuditEnabledEntity {
     @Column(name = "school_automomus")
     private String schoolAutonomus;
 
-    @Column(name = "school_udise_number")
-    private String schoolUdiseNo;
+    @Column(name = "school_identification_number")
+    private String schoolIdentificationNumber;
 
     @Column(name = "school_everyday_start_timing")
     private Instant schoolEveryDayStartTiming;

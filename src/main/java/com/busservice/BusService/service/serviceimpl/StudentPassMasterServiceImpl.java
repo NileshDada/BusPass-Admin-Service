@@ -1,13 +1,11 @@
 package com.busservice.BusService.service.serviceimpl;
 
 import com.busservice.BusService.constant.BusPassConstant;
-import com.busservice.BusService.entity.BusStopMasterEntity;
 import com.busservice.BusService.entity.StudentPassMasterEntity;
 import com.busservice.BusService.exception.BusPassException;
 import com.busservice.BusService.repository.StudentPassMasterRepo;
 import com.busservice.BusService.request.StudentPassMasterCreateRequest;
 import com.busservice.BusService.response.BusPassResponse;
-import com.busservice.BusService.response.BusStopMasterReponse;
 import com.busservice.BusService.response.StudentPassMasterReponse;
 import com.busservice.BusService.service.StudentPassMasterService;
 import com.busservice.BusService.utils.DateTimeUtils;
@@ -18,7 +16,6 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
-import javax.persistence.Column;
 import javax.transaction.Transactional;
 import java.time.Instant;
 import java.util.List;
@@ -86,6 +83,21 @@ public class StudentPassMasterServiceImpl implements StudentPassMasterService {
                 .build();
     }
 
+    @Override
+    public StudentPassMasterReponse findStudentPassMasterDetailsById(Integer studPassId, String studPassStatus) {
+        try{
+        List<Object[]> studentPassMasterData = studentPassMasterRepo.getStudentPassMasterDetailById(studPassId, studPassStatus);
+        List<StudentPassMasterReponse> studentPassMasterReponses = studentPassMasterData.stream().map(StudentPassMasterReponse::new).collect(Collectors.toList());
+        if (studentPassMasterReponses.size() > 0) {
+            return studentPassMasterReponses.get(0);
+        }
+    } catch (Exception ex) {
+        log.error("StudentPassMasterServiceImpl >> findStudentPassMasterDetailsById : {}", ex);
+        throw new BusPassException("StudentPassMasterServiceImpl >> findStudentPassMasterDetailsById()", false, ex.getMessage());
+    }
+        return null;
+    }
+
     @Transactional
     @Override
     public BusPassResponse deleteStudentPassMasterDetails(Integer studPassId) {
@@ -107,20 +119,22 @@ public class StudentPassMasterServiceImpl implements StudentPassMasterService {
 
 
     private StudentPassMasterEntity convertStudentPassMasterCreateRequestToEntity(StudentPassMasterCreateRequest masterCreateRequest) {
+
+        //pass start date, pass expire date and Payment status need to be update
         StudentPassMasterEntity studentPassMasterEntity = new StudentPassMasterEntity();
         studentPassMasterEntity.setCustId(masterCreateRequest.getCustId());
         studentPassMasterEntity.setPassTypeId(masterCreateRequest.getPassTypeId());
-        studentPassMasterEntity.setStudPassCreatedDate(DateTimeUtils.convertStringToInstant(masterCreateRequest.getStudPassCreatedDate()));
-        studentPassMasterEntity.setStudPassExpiryDate(DateTimeUtils.convertStringToInstant(masterCreateRequest.getStudPassExpiryDate()));
+        studentPassMasterEntity.setStudPassCreatedDate(Instant.now());
+        studentPassMasterEntity.setStudPassExpiryDate(Instant.now());
         studentPassMasterEntity.setRoutesId(masterCreateRequest.getRoutesId());
         studentPassMasterEntity.setFromBusStopId(masterCreateRequest.getFromBusStopId());
         studentPassMasterEntity.setToBusStopId(masterCreateRequest.getToBusStopId());
         studentPassMasterEntity.setStudPassAmount(masterCreateRequest.getStudPassAmount());
-        studentPassMasterEntity.setStudPassAmountPaidStatus(masterCreateRequest.getStudPassAmountPaidStatus());
+        studentPassMasterEntity.setStudPassAmountPaidStatus("Pending");
         studentPassMasterEntity.setSchoolName(masterCreateRequest.getStudSchoolName());
-        studentPassMasterEntity.setSchoolAddresss(masterCreateRequest.getStudSchoolAddresss());
-        studentPassMasterEntity.setSchoolAutonomus(masterCreateRequest.getStudSchoolAutonomus());
-        studentPassMasterEntity.setSchoolUdiseNo(masterCreateRequest.getStudSchoolUdiseNo());
+        studentPassMasterEntity.setSchoolAddresss(masterCreateRequest.getSchoolAddresss());
+        studentPassMasterEntity.setSchoolAutonomus(masterCreateRequest.getSchoolAutonomus());
+        studentPassMasterEntity.setSchoolIdentificationNumber(masterCreateRequest.getSchoolIdentificationNumber());
         studentPassMasterEntity.setSchoolEveryDayStartTiming(DateTimeUtils.convertStringToInstant(masterCreateRequest.getSchoolEveryDayStartTiming()));
         studentPassMasterEntity.setSchoolEveryDayEndTiming(DateTimeUtils.convertStringToInstant(masterCreateRequest.getSchoolEveryDayEndTiming()));
         studentPassMasterEntity.setStudCourseName(masterCreateRequest.getStudCourseName());

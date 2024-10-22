@@ -9,6 +9,24 @@ lst_updt_ts TIMESTAMP null,
 lst_updt_user_id VARCHAR(20) null
 );
 
+
+
+create table school_information_master(
+school_id serial  PRIMARY key,
+school_identification_number VARCHAR(20),
+school_name VARCHAR(300),
+school_address VARCHAR(300),
+school_automomus VARCHAR(300),
+school_everyday_start_timing TIMESTAMP,
+school_everyday_end_timing TIMESTAMP,
+remark VARCHAR(200),
+status_cd VARCHAR(10),
+crte_user_id VARCHAR(20) ,
+crte_ts TIMESTAMP not null DEFAULT CURRENT_TIMESTAMP,
+lst_updt_ts TIMESTAMP null,
+lst_updt_user_id VARCHAR(20) null
+);
+
 create table routes_master(
 routes_id serial  PRIMARY key,
 routes_name VARCHAR(140),

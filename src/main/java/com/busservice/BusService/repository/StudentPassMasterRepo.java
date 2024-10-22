@@ -26,4 +26,8 @@ public interface StudentPassMasterRepo extends JpaRepository<StudentPassMasterEn
     @Modifying
     @Query(value = "update student_pass_master set status_cd='I' where stud_pass_id =:studPassId", nativeQuery = true)
     public int deleteStudentPassMasterDetails(@Param("studPassId") Integer studPassId);
+
+    @Query(value = SQLQueryConstants.STUDENT_PASS_MASTER_DETAILS_BY_ID, nativeQuery = true)
+    List<Object[]> getStudentPassMasterDetailById(@Param("studPassId") Integer studPassId, @Param("studPassStatus") String studPassStatus);
+
 }
