@@ -18,6 +18,8 @@ public interface RoutesMasterRepo extends JpaRepository<RoutesMasterEntity, Inte
 
     public Optional<RoutesMasterEntity> findByRoutesNameEqualsIgnoreCase(String routesName);
 
+    public List<RoutesMasterEntity> findByStatusCd(String statusCd);
+
     @Query(value = SQLQueryConstants.ROUTES_MASTER_DETAILS_BY_PAGING, nativeQuery = true)
     List<Object[]> getRoutesMasterDetail(@Param("routesId") Integer routesId, @Param("routesName") String routesName, @Param("statusCd") String statusCd, @Param("sortName") String sortName, @Param("pageSize") Integer pageSize, @Param("pageOffset") Integer pageOffset);
 

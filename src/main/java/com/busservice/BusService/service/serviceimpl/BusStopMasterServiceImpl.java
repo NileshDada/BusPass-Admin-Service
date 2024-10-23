@@ -3,10 +3,12 @@ package com.busservice.BusService.service.serviceimpl;
 import com.busservice.BusService.constant.BusPassConstant;
 import com.busservice.BusService.entity.BusStopMasterEntity;
 import com.busservice.BusService.entity.RoutesMasterEntity;
+import com.busservice.BusService.entity.SchoolInformationMasterEntity;
 import com.busservice.BusService.exception.BusPassException;
 import com.busservice.BusService.repository.BusStopMasterRepo;
 import com.busservice.BusService.repository.RoutesMasterRepo;
 import com.busservice.BusService.request.BusStopMasterCreateRequest;
+import com.busservice.BusService.request.BusStopMasterUpdateRequest;
 import com.busservice.BusService.request.RoutesMasterCreateRequest;
 import com.busservice.BusService.response.BusPassResponse;
 import com.busservice.BusService.response.BusStopMasterReponse;
@@ -49,9 +51,32 @@ public class BusStopMasterServiceImpl implements BusStopMasterService {
                     .responseMessage(BusPassConstant.RECORD_SUCCESS)
                     .build();
         } catch (Exception ex) {
-            log.error("Inside BusStopMasterServiceImpl >> saveBusStopMaster()");
+            log.error("Inside BusStopMasterServiceImpl >> saveBusStopMaster() : {}",ex);
             throw new BusPassException("BusStopMasterServiceImpl", false, ex.getMessage());
         }
+    }
+
+
+    @Transactional
+    @Override
+    public BusPassResponse updateBusStopMaster(BusStopMasterUpdateRequest masterUpdateRequest) {
+        BusPassResponse busPassResponse = new BusPassResponse();
+        try {
+            Optional<BusStopMasterEntity> optionalBusStopMasterEntity = busStopMasterRepo.findById(masterUpdateRequest.getBusStopId());
+            if(optionalBusStopMasterEntity.isPresent()) {
+                BusStopMasterEntity busStopMasterEntity = optionalBusStopMasterEntity.get();
+                busStopMasterEntity.setBusStopName(masterUpdateRequest.getBusStopName());
+                busStopMasterEntity.setBusStopNo(masterUpdateRequest.getBusStopNo());
+                busStopMasterRepo.save(busStopMasterEntity);
+            return BusPassResponse.builder()
+                    .isSuccess(true)
+                    .responseMessage(BusPassConstant.RECORD_SUCCESS)
+                    .build();
+        }} catch (Exception ex) {
+            log.error("Inside BusStopMasterServiceImpl >> updateBusStopMaster() : {}", ex);
+            throw new BusPassException("BusStopMasterServiceImpl>>updateBusStopMaster", false, ex.getMessage());
+        }
+        return null;
     }
 
     @Override
@@ -86,6 +111,22 @@ public class BusStopMasterServiceImpl implements BusStopMasterService {
                 .build();
     }
 
+
+    @Override
+    public BusStopMasterReponse findBusStopMasterDetailsById(Integer busStopId) {
+        try {
+            List<Object[]> languageMasterData = busStopMasterRepo.getBusStopMasterDetailById(busStopId);
+            List<BusStopMasterReponse> busStopMasterReponses = languageMasterData.stream().map(BusStopMasterReponse::new).collect(Collectors.toList());
+            if (busStopMasterReponses.size() > 0) {
+                return busStopMasterReponses.get(0);
+            }
+        } catch (Exception ex) {
+            log.error("BusStopMasterServiceImpl >> findRoutesMasterDetails : {}", ex);
+            throw new BusPassException("BusStopMasterServiceImpl", false, ex.getMessage());
+        }
+        return null;
+    }
+
     @Transactional
     @Override
     public BusPassResponse deleteBusStopMasterDetails(Integer busStopId) {
@@ -103,6 +144,7 @@ public class BusStopMasterServiceImpl implements BusStopMasterService {
         }
 
     }
+
 
 
 

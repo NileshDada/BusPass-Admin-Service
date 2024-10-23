@@ -26,4 +26,8 @@ public interface BusStopMasterRepo extends JpaRepository<BusStopMasterEntity, In
     @Modifying
     @Query(value = "update bus_stop_master set status_cd='I' where bus_stop_id =:busStopId", nativeQuery = true)
     public int deleteBusStopMasterDetails(@Param("busStopId") Integer busStopId);
+
+    @Query(value = SQLQueryConstants.BUS_STOP_MASTER_DETAILS_BY_ID, nativeQuery = true)
+    List<Object[]> getBusStopMasterDetailById(@Param("busStopId") Integer busStopId);
+
 }

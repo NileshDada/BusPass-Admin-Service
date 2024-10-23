@@ -1,6 +1,7 @@
 package com.busservice.BusService.service.serviceimpl;
 
 import com.busservice.BusService.constant.BusPassConstant;
+import com.busservice.BusService.dto.DDRoutesMasterResponse;
 import com.busservice.BusService.entity.LanguageMasterEntity;
 import com.busservice.BusService.entity.RoutesMasterEntity;
 import com.busservice.BusService.exception.BusPassException;
@@ -23,6 +24,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -61,7 +63,7 @@ public class RoutesMasterServiceImpl implements RoutesMasterService {
     public BusPassResponse updateRoutesMaster(RoutesMasterUpdateRequest masterUpdateRequest) {
         BusPassResponse busPassResponse = new BusPassResponse();
         try {
-            routesMasterRepo.updateRoutesMasterDetails(masterUpdateRequest.getRoutesId(), masterUpdateRequest.getRoutesName(),masterUpdateRequest.getRoutesStartLocation(),masterUpdateRequest.getRoutesEndLocation(), masterUpdateRequest.getRemark(), masterUpdateRequest.getEmployeeId());
+            routesMasterRepo.updateRoutesMasterDetails(masterUpdateRequest.getRoutesId(), masterUpdateRequest.getRoutesName(), masterUpdateRequest.getRoutesStartLocation(), masterUpdateRequest.getRoutesEndLocation(), masterUpdateRequest.getRemark(), masterUpdateRequest.getEmployeeId());
             busPassResponse.setSuccess(true);
             busPassResponse.setResponseMessage("Language updated successfully");
             return busPassResponse;
@@ -107,7 +109,7 @@ public class RoutesMasterServiceImpl implements RoutesMasterService {
 
     @Override
     public RoutesMasterReponse findRoutesMasterDetailsById(Integer routesId) {
-        try{
+        try {
             List<Object[]> languageMasterData = routesMasterRepo.getRoutesMasterDetailById(routesId);
             List<RoutesMasterReponse> routesMasterReponses = languageMasterData.stream().map(RoutesMasterReponse::new).collect(Collectors.toList());
             if (routesMasterReponses.size() > 0) {
@@ -138,6 +140,21 @@ public class RoutesMasterServiceImpl implements RoutesMasterService {
 
     }
 
+    @Override
+    public List<DDRoutesMasterResponse> ddBusRoutesMasterDetails() {
+        List<DDRoutesMasterResponse> ddRoutesMasterResponses = new ArrayList<>();
+        List<RoutesMasterEntity> routesMasterEntities = routesMasterRepo.findByStatusCd("A");
+        if (routesMasterEntities.size() > 0) {
+            for (RoutesMasterEntity routesMasterEntity : routesMasterEntities) {
+                DDRoutesMasterResponse ddRoutesMasterResponse = new DDRoutesMasterResponse();
+                ddRoutesMasterResponse.setRoutesId(routesMasterEntity.getRoutesId());
+                ddRoutesMasterResponse.setRoutesName(routesMasterEntity.getRoutesName());
+                ddRoutesMasterResponses.add(ddRoutesMasterResponse);
+            }
+            return ddRoutesMasterResponses;
+        }
+        return null;
+    }
 
 
     private RoutesMasterEntity convertLanguageMasterCreateRequestToEntity(RoutesMasterCreateRequest routesMasterCreateRequest) {

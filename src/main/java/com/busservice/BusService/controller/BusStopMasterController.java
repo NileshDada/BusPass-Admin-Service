@@ -2,8 +2,10 @@ package com.busservice.BusService.controller;
 
 
 import com.busservice.BusService.request.BusStopMasterCreateRequest;
+import com.busservice.BusService.request.BusStopMasterUpdateRequest;
 import com.busservice.BusService.request.RoutesMasterCreateRequest;
 import com.busservice.BusService.response.BusPassResponse;
+import com.busservice.BusService.response.BusStopMasterReponse;
 import com.busservice.BusService.service.BusStopMasterService;
 import com.busservice.BusService.service.RoutesMasterService;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -16,6 +18,7 @@ import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -35,6 +38,14 @@ public class BusStopMasterController {
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
+    @PutMapping
+    public ResponseEntity<BusPassResponse> updateBusStopMaster(@RequestBody BusStopMasterUpdateRequest masterUpdateRequest) {
+        System.out.println("masterUpdateRequest :"+masterUpdateRequest);
+        BusPassResponse response = busStopMasterService.updateBusStopMaster(masterUpdateRequest);
+        return new ResponseEntity<>(response, HttpStatus.OK);
+    }
+
+
     @GetMapping
     @PageableAsQueryParam
     public ResponseEntity<BusPassResponse> findBusStopMasterDetails(@RequestParam(required = false) Integer busStopId,
@@ -46,9 +57,18 @@ public class BusStopMasterController {
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
+    @GetMapping(value = "/by-busstopid")
+    public ResponseEntity<BusStopMasterReponse> findBusStopMasterDetailsById(@RequestParam(required = false) Integer busStopId) {
+
+        BusStopMasterReponse response = busStopMasterService.findBusStopMasterDetailsById(busStopId);
+        return new ResponseEntity<>(response, HttpStatus.OK);
+    }
+
     @DeleteMapping
     public ResponseEntity<BusPassResponse> deleteBusStopMasterDetails(@RequestParam(required = false) Integer busStopId) {
         BusPassResponse response = busStopMasterService.deleteBusStopMasterDetails(busStopId);
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
+
+
 }
