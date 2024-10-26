@@ -5,7 +5,10 @@ import com.busservice.BusService.request.DocumentMasterUpdateRequest;
 import com.busservice.BusService.request.LanguageMasterCreateRequest;
 import com.busservice.BusService.response.BusPassResponse;
 import com.busservice.BusService.response.DocumentMasterReponse;
+import com.busservice.BusService.response.dropdown.DocumentMasterDD;
 import org.springframework.data.domain.Pageable;
+
+import java.util.List;
 
 public interface DocumentMasterService {
 
@@ -19,6 +22,6 @@ public interface DocumentMasterService {
 
     public BusPassResponse deleteDocumentMasterDetails(Integer docId, String employeeId);
 
-    public BusPassResponse findDDDocumentMasterDetails();
+    public List<DocumentMasterDD> ddDocumentMasterDetails();
 
 }

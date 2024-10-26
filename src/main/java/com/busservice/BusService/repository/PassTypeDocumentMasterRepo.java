@@ -27,5 +27,10 @@ public interface PassTypeDocumentMasterRepo extends JpaRepository<PassTypeDocume
     @Query(value = "update pass_type_document_master set status_cd='I' where pass_type_doc_id =:passTypeDocId", nativeQuery = true)
     public int deletePassTypeDocumentMasterDetails(@Param("passTypeDocId") Integer passTypeDocId);
 
+    @Query(value = SQLQueryConstants.PASS_TYPE_DOCUMENT_MASTER_DETAILS_BY_ID, nativeQuery = true)
+    List<Object[]> getPassTypeDocumentMasterDetailById(@Param("passTypeDocId") Integer passTypeDocId);
+
+    @Query(value = SQLQueryConstants.PASS_TYPE_DOCUMENT_MASTER_DETAILS_BY_PASS_TYPE_ID, nativeQuery = true)
+    List<Object[]> getPassTypeDocumentMasterDetailByPassTypeId(@Param("passTypeDocId") Integer passTypeDocId, @Param("passTypeId") Integer passTypeId, @Param("statusCd") String statusCd);
 
 }

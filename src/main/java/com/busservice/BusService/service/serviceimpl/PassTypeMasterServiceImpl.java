@@ -10,6 +10,7 @@ import com.busservice.BusService.request.PassTypeMasterUpdateRequest;
 import com.busservice.BusService.response.BusPassResponse;
 import com.busservice.BusService.response.BusStopMasterReponse;
 import com.busservice.BusService.response.PassTypeMasterReponse;
+import com.busservice.BusService.response.dropdown.PassTypeMasterDD;
 import com.busservice.BusService.service.PassTypeMasterService;
 import com.busservice.BusService.utils.DateTimeUtils;
 import lombok.extern.slf4j.Slf4j;
@@ -115,6 +116,22 @@ public class PassTypeMasterServiceImpl implements PassTypeMasterService {
         log.error("PassTypeMasterServiceImpl >> findPassTypeMasterDetailsById : {}", ex);
         throw new BusPassException("PassTypeMasterServiceImpl >> findPassTypeMasterDetailsById", false, ex.getMessage());
     }
+        return null;
+    }
+
+
+    @Override
+    public List<PassTypeMasterDD> ddPassTypeMasterDetails() {
+        try{
+            List<Object[]> passTypeMasterData = passTypeMasterRepo.ddPassTypeMasterDetail();
+            List<PassTypeMasterDD> passTypeMasterDDS = passTypeMasterData.stream().map(PassTypeMasterDD::new).collect(Collectors.toList());
+            if (passTypeMasterDDS.size() > 0) {
+                return passTypeMasterDDS;
+            }
+        } catch (Exception ex) {
+            log.error("PassTypeMasterServiceImpl >> ddPassTypeMasterDetails : {}", ex);
+            throw new BusPassException("PassTypeMasterServiceImpl >> ddPassTypeMasterDetails", false, ex.getMessage());
+        }
         return null;
     }
 

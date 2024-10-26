@@ -9,11 +9,14 @@ import com.busservice.BusService.exception.BusPassException;
 import com.busservice.BusService.repository.PassTypeDocumentMasterRepo;
 import com.busservice.BusService.repository.PassTypeMasterRepo;
 import com.busservice.BusService.request.PassTypeDocumentMasterCreateRequest;
+import com.busservice.BusService.request.PassTypeDocumentMasterUpdateRequest;
 import com.busservice.BusService.request.PassTypeMasterCreateRequest;
 import com.busservice.BusService.response.BusPassResponse;
 import com.busservice.BusService.response.DocumentMasterReponse;
+import com.busservice.BusService.response.LanguageMasterReponse;
 import com.busservice.BusService.response.PassTypeDocumentMasterReponse;
 import com.busservice.BusService.response.PassTypeMasterReponse;
+import com.busservice.BusService.response.SinglePassTypeDocumentMasterReponse;
 import com.busservice.BusService.service.PassTypeDocumentMasterService;
 import com.busservice.BusService.service.PassTypeMasterService;
 import com.busservice.BusService.utils.DateTimeUtils;
@@ -44,7 +47,10 @@ public class PassTypeDocumentMasterServiceImpl implements PassTypeDocumentMaster
         Optional<PassTypeDocumentMasterEntity> optionalPassTypeDocumentMasterEntity = passTypeDocumentMasterRepo.findByPassTypeIdAndDocId(documentMasterCreateRequest.getPassTypeId(),documentMasterCreateRequest.getDocId());
         if (optionalPassTypeDocumentMasterEntity.isPresent()) {
             log.error("Inside PassTypeDocumentMasterServiceImpl >> savePassTypeDocumentMaster()");
-            throw new BusPassException("PassTypeDocumentMasterServiceImpl Class", false, "Routes name already exist");
+            return BusPassResponse.builder()
+                    .isSuccess(false)
+                    .responseMessage("Pass Type Document already exist")
+                    .build();
         }
 
         PassTypeDocumentMasterEntity passTypeDocumentMasterEntity = convertPassTypeDocumentMasterCreateRequestToEntity(documentMasterCreateRequest);
@@ -60,6 +66,42 @@ public class PassTypeDocumentMasterServiceImpl implements PassTypeDocumentMaster
         }
     }
 
+    @Override
+    public BusPassResponse updatePassTypeDocumentMaster(PassTypeDocumentMasterUpdateRequest masterUpdateRequest) {
+        BusPassResponse busPassResponse = new BusPassResponse();
+        try {
+            Optional<PassTypeDocumentMasterEntity> optionalPassTypeDocumentMasterEntity = passTypeDocumentMasterRepo.findById(masterUpdateRequest.getPassTypeDocId());
+            if(optionalPassTypeDocumentMasterEntity.isPresent()) {
+                PassTypeDocumentMasterEntity documentMasterEntity = optionalPassTypeDocumentMasterEntity.get();
+                documentMasterEntity.setPassTypeId(masterUpdateRequest.getPassTypeId());
+                passTypeDocumentMasterRepo.save(documentMasterEntity);
+                busPassResponse.setResponseMessage("Pass Type Document updated successfully");
+                busPassResponse.setSuccess(true);
+                return  busPassResponse;
+            }
+        } catch (Exception ex) {
+            log.error("Inside PassTypeDocumentMasterServiceImpl >> updatePassTypeDocumentMaster(): {}",ex);
+            throw new BusPassException("PassTypeDocumentMasterServiceImpl >> updatePassTypeDocumentMaster", false, ex.getMessage());
+        }
+
+        busPassResponse.setSuccess(false);
+        return  busPassResponse;
+    }
+
+    @Override
+    public SinglePassTypeDocumentMasterReponse findPassTypeDocumentDetailsById(Integer passTypeDocId) {
+        try {
+            List<Object[]> passTypeMasterData = passTypeDocumentMasterRepo.getPassTypeDocumentMasterDetailById(passTypeDocId);
+            List<SinglePassTypeDocumentMasterReponse> singlePassTypeDocumentMasterReponses = passTypeMasterData.stream().map(SinglePassTypeDocumentMasterReponse::new).collect(Collectors.toList());
+            if (singlePassTypeDocumentMasterReponses.size() > 0) {
+               return singlePassTypeDocumentMasterReponses.get(0);
+            }
+        } catch (Exception ex) {
+            log.error("Inside PassTypeDocumentMasterServiceImpl >> findPassTypeDocumentDetailsById(): {}", ex);
+            throw new BusPassException("PassTypeDocumentMasterServiceImpl >> findPassTypeDocumentDetailsById", false, ex.getMessage());
+        }
+        return null;
+    }
     @Override
     public BusPassResponse findPassTypeDocumentDetails(Integer passTypeDocId, Integer passTypeId, String statusCd, Pageable requestPageable) {
         try {
@@ -79,6 +121,33 @@ public class PassTypeDocumentMasterServiceImpl implements PassTypeDocumentMaster
 
             Integer totalCount = passTypeDocumentMasterRepo.getPassTypeDocumentMasterDetailsCount(passTypeDocId, passTypeId, statusCd);
             List<Object[]> passTypeMasterData = passTypeDocumentMasterRepo.getPassTypeDocumentMasterDetail(passTypeDocId, passTypeId, statusCd, sortName, pageSize, pageOffset);
+            List<SinglePassTypeDocumentMasterReponse> singlePassTypeDocumentMasterReponses = passTypeMasterData.stream().map(SinglePassTypeDocumentMasterReponse::new).collect(Collectors.toList());
+
+
+            if (singlePassTypeDocumentMasterReponses.size() > 0) {
+                return BusPassResponse.builder()
+                        .isSuccess(true)
+                        .responseData(new PageImpl<>(singlePassTypeDocumentMasterReponses, requestPageable, totalCount))
+                        .build();
+            }
+        } catch (Exception ex) {
+            log.error("PassTypeDocumentMasterServiceImpl >> findPassTypeMasterDetails : {}", ex);
+            throw new BusPassException("PassTypeDocumentMasterServiceImpl", false, ex.getMessage());
+        }
+        return BusPassResponse.builder()
+                .isSuccess(false)
+                .build();
+    }
+
+
+    @Override
+    public BusPassResponse findPassTypeDocumentDetailsByPassTypeId(Integer passTypeDocId, Integer passTypeId, String statusCd) {
+        try {
+            log.debug("passTypeDocId : {}", passTypeDocId);
+            List<PassTypeDocumentMasterReponse> passTypeDocumentMasterReponseList = new ArrayList<>();
+            PassTypeDocumentMasterReponse documentMasterReponse = null;
+
+            List<Object[]> passTypeMasterData = passTypeDocumentMasterRepo.getPassTypeDocumentMasterDetailByPassTypeId(passTypeDocId, passTypeId, statusCd);
             List<PassTypeDocumentMasterDTO> passTypeDocumentMasterDTOS = passTypeMasterData.stream().map(PassTypeDocumentMasterDTO::new).collect(Collectors.toList());
 
             Map<PassTypeMasterReponse, List<DocumentMasterReponse>> passTypeMasterReponseListMap =
@@ -100,7 +169,7 @@ public class PassTypeDocumentMasterServiceImpl implements PassTypeDocumentMaster
             if (passTypeDocumentMasterReponseList.size() > 0) {
                 return BusPassResponse.builder()
                         .isSuccess(true)
-                        .responseData(new PageImpl<>(passTypeDocumentMasterReponseList, requestPageable, totalCount))
+                        .responseData(passTypeDocumentMasterReponseList)
                         .build();
             }
         } catch (Exception ex) {

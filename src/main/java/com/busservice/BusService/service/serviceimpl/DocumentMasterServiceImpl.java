@@ -12,6 +12,7 @@ import com.busservice.BusService.request.LanguageMasterCreateRequest;
 import com.busservice.BusService.response.BusPassResponse;
 import com.busservice.BusService.response.DocumentMasterReponse;
 import com.busservice.BusService.response.LanguageMasterReponse;
+import com.busservice.BusService.response.dropdown.DocumentMasterDD;
 import com.busservice.BusService.response.dropdown.LanguageMasterDD;
 import com.busservice.BusService.service.DocumentMasterService;
 import com.busservice.BusService.service.LanguageMasterService;
@@ -109,16 +110,16 @@ public class DocumentMasterServiceImpl implements DocumentMasterService {
 
     @Override
     public DocumentMasterReponse findDocumentMasterById(Integer docId) {
-        try{
-        List<Object[]> documentMasterData = documentMasterRepo.getDocumentMasterDetailByDocId(docId);
-        List<DocumentMasterReponse> documentMasterReponses = documentMasterData.stream().map(DocumentMasterReponse::new).collect(Collectors.toList());
-        if (documentMasterReponses.size() > 0) {
-            return documentMasterReponses.get(0);
+        try {
+            List<Object[]> documentMasterData = documentMasterRepo.getDocumentMasterDetailByDocId(docId);
+            List<DocumentMasterReponse> documentMasterReponses = documentMasterData.stream().map(DocumentMasterReponse::new).collect(Collectors.toList());
+            if (documentMasterReponses.size() > 0) {
+                return documentMasterReponses.get(0);
+            }
+        } catch (Exception ex) {
+            log.error("DocumentMasterServiceImpl >> findDocumentMasterById : {}", ex);
+            throw new BusPassException("DocumentMasterServiceImpl >> findDocumentMasterById", false, ex.getMessage());
         }
-    } catch (Exception ex) {
-        log.error("DocumentMasterServiceImpl >> findDocumentMasterById : {}", ex);
-        throw new BusPassException("DocumentMasterServiceImpl >> findDocumentMasterById", false, ex.getMessage());
-    }
         return null;
     }
 
@@ -127,7 +128,7 @@ public class DocumentMasterServiceImpl implements DocumentMasterService {
     public BusPassResponse deleteDocumentMasterDetails(Integer docId, String employeeId) {
         BusPassResponse busPassResponse = new BusPassResponse();
         try {
-            documentMasterRepo.deleteDocumentMasterDetails(docId,employeeId);
+            documentMasterRepo.deleteDocumentMasterDetails(docId, employeeId);
             busPassResponse.setSuccess(true);
             busPassResponse.setResponseMessage("Document details deleted Successfully");
             return busPassResponse;
@@ -141,13 +142,13 @@ public class DocumentMasterServiceImpl implements DocumentMasterService {
     }
 
     @Override
-    public BusPassResponse findDDDocumentMasterDetails() {
-        List<Object[]> languageMasterData = documentMasterRepo.findDDDocumentMasterDetails();
-        if (languageMasterData.size() > 0) {
-            List<LanguageMasterDD> languageMasterReponses = languageMasterData.stream().map(LanguageMasterDD::new).collect(Collectors.toList());
-            return BusPassResponse.builder().isSuccess(true).responseData(languageMasterReponses).build();
+    public List<DocumentMasterDD> ddDocumentMasterDetails() {
+        List<Object[]> documentMasterData = documentMasterRepo.findDDDocumentMasterDetails();
+        if (documentMasterData.size() > 0) {
+            List<DocumentMasterDD> documentMasterDDS = documentMasterData.stream().map(DocumentMasterDD::new).collect(Collectors.toList());
+            return documentMasterDDS;
         }
-        return BusPassResponse.builder().isSuccess(false).build();
+        return null;
     }
 
 

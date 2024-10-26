@@ -34,4 +34,7 @@ public interface PassTypeMasterRepo extends JpaRepository<PassTypeMasterEntity, 
     @Modifying
     @Query(value = "update pass_type_master set pass_type_name=:passTypeName,pass_type_description=:passTypeDescription,pass_type_end_date=:passTypeEndDate,pass_type_collection_location=:passTypeCollectionLocation,pass_type_amount=:passTypeAmount,pass_type_age_limit=:passTypeAgeLimit,remark=:remark,lst_updt_user_id=:employeeId  where pass_type_id =:passTypeId", nativeQuery = true)
     public int updatePassTypeMasterDetails(@Param("passTypeId") Integer passTypeId, @Param("passTypeName") String passTypeName, @Param("passTypeDescription") String passTypeDescription, @Param("passTypeEndDate") Instant passTypeEndDate, @Param("passTypeCollectionLocation") String passTypeCollectionLocation, @Param("passTypeAmount") String passTypeAmount, @Param("passTypeAgeLimit") String passTypeAgeLimit, @Param("remark") String remark, @Param("employeeId") String employeeId);
+
+    @Query(value = SQLQueryConstants.PASS_TYPE_MASTER_DETAILS_DD, nativeQuery = true)
+    List<Object[]> ddPassTypeMasterDetail();
 }

@@ -6,6 +6,7 @@ import com.busservice.BusService.request.DocumentMasterUpdateRequest;
 import com.busservice.BusService.request.LanguageMasterCreateRequest;
 import com.busservice.BusService.response.BusPassResponse;
 import com.busservice.BusService.response.DocumentMasterReponse;
+import com.busservice.BusService.response.dropdown.DocumentMasterDD;
 import com.busservice.BusService.service.DocumentMasterService;
 import com.busservice.BusService.service.LanguageMasterService;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -23,6 +24,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+
+import java.util.List;
 
 @CrossOrigin
 @RestController
@@ -70,8 +73,8 @@ public class DocumentMasterController {
     }
 
     @GetMapping (value = "/dd-document-master")
-    public ResponseEntity<BusPassResponse> findDDDocumentMasterDetails() {
-        BusPassResponse response = documentMasterService.findDDDocumentMasterDetails();
+    public ResponseEntity< List<DocumentMasterDD>> ddDocumentMasterDetails() {
+        List<DocumentMasterDD> response = documentMasterService.ddDocumentMasterDetails();
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
