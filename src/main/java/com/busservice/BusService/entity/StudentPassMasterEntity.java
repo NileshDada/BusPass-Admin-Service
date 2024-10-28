@@ -57,23 +57,8 @@ public class StudentPassMasterEntity extends AuditEnabledEntity {
     @Column(name = "school_id")
     private Integer schoolId;
 
-    @Column(name = "school_name")
-    private String schoolName;
-
-    @Column(name = "school_address")
-    private String schoolAddresss;
-
-    @Column(name = "school_automomus")
-    private String schoolAutonomus;
-
     @Column(name = "school_identification_number")
     private String schoolIdentificationNumber;
-
-    @Column(name = "school_everyday_start_timing")
-    private Instant schoolEveryDayStartTiming;
-
-    @Column(name = "school_everyday_end_timing")
-    private Instant schoolEveryDayEndTiming;
 
     @Column(name = "stud_course_name")
     private String studCourseName;

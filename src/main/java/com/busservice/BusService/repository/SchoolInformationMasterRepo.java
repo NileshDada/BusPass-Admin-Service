@@ -30,6 +30,9 @@ public interface SchoolInformationMasterRepo extends JpaRepository<SchoolInforma
     @Query(value = "update school_information_master set status_cd='I' where school_id =:schoolId", nativeQuery = true)
     public int deleteLanguageMasterDetails(@Param("schoolId") Integer schoolId);
 
+    @Query(value = SQLQueryConstants.SCHOOL_INFORMATION_MASTER_DD, nativeQuery = true)
+    List<Object[]> ddSchoolInformationMaster();
+
    /* @Modifying
     @Query(value = "update language_master set lang_name=:langName,remark=:remark,lst_updt_user_id=:employeeId  where lang_id =:langId", nativeQuery = true)
     public int updateLanguageMasterDetails(@Param("langId") Integer langId,@Param("langName") String langName,@Param("remark") String remark,@Param("employeeId") String employeeId);

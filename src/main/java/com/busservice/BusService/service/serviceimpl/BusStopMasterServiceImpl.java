@@ -1,6 +1,7 @@
 package com.busservice.BusService.service.serviceimpl;
 
 import com.busservice.BusService.constant.BusPassConstant;
+import com.busservice.BusService.dto.DDRoutesMasterResponse;
 import com.busservice.BusService.entity.BusStopMasterEntity;
 import com.busservice.BusService.entity.RoutesMasterEntity;
 import com.busservice.BusService.entity.SchoolInformationMasterEntity;
@@ -23,6 +24,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -145,7 +147,20 @@ public class BusStopMasterServiceImpl implements BusStopMasterService {
 
     }
 
-
+    @Override
+    public List<DDRoutesMasterResponse> ddBusRoutesMasterDetails() {
+        try {
+            List<Object[]> languageMasterData = busStopMasterRepo.ddRouteNameFromBusStopMaster();
+            List<DDRoutesMasterResponse> busStopMasterReponses = languageMasterData.stream().map(DDRoutesMasterResponse::new).collect(Collectors.toList());
+            if (busStopMasterReponses.size() > 0) {
+                return busStopMasterReponses;
+            }
+        } catch (Exception ex) {
+            log.error("BusStopMasterServiceImpl >> findRoutesMasterDetails : {}", ex);
+            throw new BusPassException("BusStopMasterServiceImpl", false, ex.getMessage());
+        }
+        return null;
+    }
 
 
     private BusStopMasterEntity convertBusStopMasterCreateRequestToEntity(BusStopMasterCreateRequest busStopMasterCreateRequest) {

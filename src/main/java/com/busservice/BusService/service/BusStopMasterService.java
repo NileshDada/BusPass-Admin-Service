@@ -1,11 +1,14 @@
 package com.busservice.BusService.service;
 
+import com.busservice.BusService.dto.DDRoutesMasterResponse;
 import com.busservice.BusService.request.BusStopMasterCreateRequest;
 import com.busservice.BusService.request.BusStopMasterUpdateRequest;
 import com.busservice.BusService.request.RoutesMasterCreateRequest;
 import com.busservice.BusService.response.BusPassResponse;
 import com.busservice.BusService.response.BusStopMasterReponse;
 import org.springframework.data.domain.Pageable;
+
+import java.util.List;
 
 public interface BusStopMasterService {
 
@@ -20,6 +23,6 @@ public interface BusStopMasterService {
     public BusPassResponse deleteBusStopMasterDetails(Integer busStopId);
 
 
-
+    public List<DDRoutesMasterResponse> ddBusRoutesMasterDetails();
 
 }

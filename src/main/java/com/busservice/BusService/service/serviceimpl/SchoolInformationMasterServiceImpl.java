@@ -1,6 +1,7 @@
 package com.busservice.BusService.service.serviceimpl;
 
 import com.busservice.BusService.constant.BusPassConstant;
+import com.busservice.BusService.dto.DDRoutesMasterResponse;
 import com.busservice.BusService.entity.LanguageMasterEntity;
 import com.busservice.BusService.entity.SchoolInformationMasterEntity;
 import com.busservice.BusService.exception.BusPassException;
@@ -14,6 +15,7 @@ import com.busservice.BusService.response.BusPassResponse;
 import com.busservice.BusService.response.LanguageMasterReponse;
 import com.busservice.BusService.response.SchoolInformationMasterReponse;
 import com.busservice.BusService.response.dropdown.LanguageMasterDD;
+import com.busservice.BusService.response.dropdown.SchoolInfoMasterDD;
 import com.busservice.BusService.service.LanguageMasterService;
 import com.busservice.BusService.service.SchoolInformationMasterService;
 import com.busservice.BusService.utils.DateTimeUtils;
@@ -132,6 +134,21 @@ public class SchoolInformationMasterServiceImpl implements SchoolInformationMast
         } catch (Exception ex) {
             log.error("SchoolInformationMasterServiceImpl >>findSchoolInformationMasterBySchoolId() : {}", ex);
             throw new BusPassException("SchoolInformationMasterServiceImpl >> findSchoolInformationMasterBySchoolId", false, ex.getMessage());
+        }
+        return null;
+    }
+
+    @Override
+    public List<SchoolInfoMasterDD> ddSchoolInformationMasterDetails() {
+        try {
+            List<Object[]> schoolInformationMasterData = schoolInformationMasterRepo.ddSchoolInformationMaster();
+            List<SchoolInfoMasterDD> schoolInfoMasterDDS = schoolInformationMasterData.stream().map(SchoolInfoMasterDD::new).collect(Collectors.toList());
+            if (schoolInfoMasterDDS.size() > 0) {
+                return schoolInfoMasterDDS;
+            }
+        } catch (Exception ex) {
+            log.error("SchoolInformationMasterServiceImpl >> ddSchoolInformationMasterDetails : {}", ex);
+            throw new BusPassException("SchoolInformationMasterServiceImpl >> ddSchoolInformationMasterDetails", false, ex.getMessage());
         }
         return null;
     }

@@ -1,9 +1,11 @@
 package com.busservice.BusService.controller;
 
+import com.busservice.BusService.dto.DDRoutesMasterResponse;
 import com.busservice.BusService.request.SchoolInformationMasterCreateRequest;
 import com.busservice.BusService.request.SchoolInformationMasterUpdateRequest;
 import com.busservice.BusService.response.BusPassResponse;
 import com.busservice.BusService.response.SchoolInformationMasterReponse;
+import com.busservice.BusService.response.dropdown.SchoolInfoMasterDD;
 import com.busservice.BusService.service.SchoolInformationMasterService;
 import io.swagger.v3.oas.annotations.Parameter;
 import org.springdoc.core.converters.models.PageableAsQueryParam;
@@ -20,6 +22,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+
+import java.util.List;
 
 @CrossOrigin
 @RestController
@@ -65,6 +69,14 @@ public class SchoolInformationController {
     @DeleteMapping
     public ResponseEntity<BusPassResponse> deleteSchoolInformationMasterById(@RequestParam(required = false) Integer schoolId) {
         BusPassResponse response = schoolInformationMasterService.deleteSchoolInformationMasterById(schoolId);
+        return new ResponseEntity<>(response, HttpStatus.OK);
+    }
+
+
+    @GetMapping(value = "/dd-school-info")
+    public ResponseEntity<List<SchoolInfoMasterDD>> ddSchoolInformationMasterDetails() {
+
+        List<SchoolInfoMasterDD> response = schoolInformationMasterService.ddSchoolInformationMasterDetails();
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 }

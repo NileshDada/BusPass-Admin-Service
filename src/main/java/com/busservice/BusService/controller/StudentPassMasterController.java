@@ -1,9 +1,11 @@
 package com.busservice.BusService.controller;
 
 
+import com.busservice.BusService.dto.DDRoutesMasterResponse;
 import com.busservice.BusService.request.BusStopMasterCreateRequest;
 import com.busservice.BusService.request.StudentPassMasterCreateRequest;
 import com.busservice.BusService.response.BusPassResponse;
+import com.busservice.BusService.response.StudentPassMasterReponse;
 import com.busservice.BusService.service.BusStopMasterService;
 import com.busservice.BusService.service.StudentPassMasterService;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -20,6 +22,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+
+import java.util.List;
 
 @CrossOrigin
 @RestController
@@ -46,9 +50,19 @@ public class StudentPassMasterController {
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
+
+    @GetMapping("/by-studpassid")
+    public ResponseEntity<StudentPassMasterReponse> findStudentPassMasterDetailsByStudPassId(@RequestParam(required = false) Integer studPassId) {
+
+        StudentPassMasterReponse response = studentPassMasterService.findStudentPassMasterDetailsByStudPassId(studPassId);
+        return new ResponseEntity<>(response, HttpStatus.OK);
+    }
+
     @DeleteMapping
     public ResponseEntity<BusPassResponse> deleteStudentPassMasterDetails(@RequestParam(required = false) Integer studPassId) {
         BusPassResponse response = studentPassMasterService.deleteStudentPassMasterDetails(studPassId);
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
+
+
 }

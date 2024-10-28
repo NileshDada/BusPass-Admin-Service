@@ -28,6 +28,6 @@ public interface StudentPassMasterRepo extends JpaRepository<StudentPassMasterEn
     public int deleteStudentPassMasterDetails(@Param("studPassId") Integer studPassId);
 
     @Query(value = SQLQueryConstants.STUDENT_PASS_MASTER_DETAILS_BY_ID, nativeQuery = true)
-    List<Object[]> getStudentPassMasterDetailById(@Param("studPassId") Integer studPassId, @Param("studPassStatus") String studPassStatus);
+    List<Object[]> getStudentPassMasterDetailById(@Param("studPassId") Integer studPassId);
 
 }

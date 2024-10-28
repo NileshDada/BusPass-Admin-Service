@@ -7,6 +7,7 @@ import com.busservice.BusService.repository.StudentPassMasterRepo;
 import com.busservice.BusService.request.StudentPassMasterCreateRequest;
 import com.busservice.BusService.response.BusPassResponse;
 import com.busservice.BusService.response.StudentPassMasterReponse;
+import com.busservice.BusService.response.dropdown.PassTypeMasterDD;
 import com.busservice.BusService.service.StudentPassMasterService;
 import com.busservice.BusService.utils.DateTimeUtils;
 import lombok.extern.slf4j.Slf4j;
@@ -83,20 +84,22 @@ public class StudentPassMasterServiceImpl implements StudentPassMasterService {
                 .build();
     }
 
+
     @Override
-    public StudentPassMasterReponse findStudentPassMasterDetailsById(Integer studPassId, String studPassStatus) {
-        try{
-        List<Object[]> studentPassMasterData = studentPassMasterRepo.getStudentPassMasterDetailById(studPassId, studPassStatus);
-        List<StudentPassMasterReponse> studentPassMasterReponses = studentPassMasterData.stream().map(StudentPassMasterReponse::new).collect(Collectors.toList());
-        if (studentPassMasterReponses.size() > 0) {
-            return studentPassMasterReponses.get(0);
+    public StudentPassMasterReponse findStudentPassMasterDetailsByStudPassId(Integer studPassId) {
+        try {
+            List<Object[]> studentPassMasterData = studentPassMasterRepo.getStudentPassMasterDetailById(studPassId);
+            List<StudentPassMasterReponse> studentPassMasterReponses = studentPassMasterData.stream().map(StudentPassMasterReponse::new).collect(Collectors.toList());
+            if (studentPassMasterReponses.size() > 0) {
+               return studentPassMasterReponses.get(0);
+            }
+        } catch (Exception ex) {
+            log.error("StudentPassMasterServiceImpl >> findStudentPassMasterDetails : {}", ex);
+            throw new BusPassException("StudentPassMasterServiceImpl", false, ex.getMessage());
         }
-    } catch (Exception ex) {
-        log.error("StudentPassMasterServiceImpl >> findStudentPassMasterDetailsById : {}", ex);
-        throw new BusPassException("StudentPassMasterServiceImpl >> findStudentPassMasterDetailsById()", false, ex.getMessage());
-    }
         return null;
     }
+
 
     @Transactional
     @Override
@@ -131,16 +134,12 @@ public class StudentPassMasterServiceImpl implements StudentPassMasterService {
         studentPassMasterEntity.setToBusStopId(masterCreateRequest.getToBusStopId());
         studentPassMasterEntity.setStudPassAmount(masterCreateRequest.getStudPassAmount());
         studentPassMasterEntity.setStudPassAmountPaidStatus("Pending");
-        studentPassMasterEntity.setSchoolName(masterCreateRequest.getStudSchoolName());
-        studentPassMasterEntity.setSchoolAddresss(masterCreateRequest.getSchoolAddresss());
-        studentPassMasterEntity.setSchoolAutonomus(masterCreateRequest.getSchoolAutonomus());
+        studentPassMasterEntity.setSchoolId(masterCreateRequest.getSchoolId());
         studentPassMasterEntity.setSchoolIdentificationNumber(masterCreateRequest.getSchoolIdentificationNumber());
-        studentPassMasterEntity.setSchoolEveryDayStartTiming(DateTimeUtils.convertStringToInstant(masterCreateRequest.getSchoolEveryDayStartTiming()));
-        studentPassMasterEntity.setSchoolEveryDayEndTiming(DateTimeUtils.convertStringToInstant(masterCreateRequest.getSchoolEveryDayEndTiming()));
         studentPassMasterEntity.setStudCourseName(masterCreateRequest.getStudCourseName());
         studentPassMasterEntity.setStudClassName(masterCreateRequest.getStudClassName());
         studentPassMasterEntity.setStudRollNo(masterCreateRequest.getStudRollNo());
-        studentPassMasterEntity.setStudPassStatus(masterCreateRequest.getStudPassStatus());
+        studentPassMasterEntity.setStudPassStatus("InActive"); //Active or InActive
         studentPassMasterEntity.setRemark(masterCreateRequest.getRemark());
         studentPassMasterEntity.setStatusCd(masterCreateRequest.getStatusCd());
         studentPassMasterEntity.setCreatedUserId(masterCreateRequest.getEmployeeId());

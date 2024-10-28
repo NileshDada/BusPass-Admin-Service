@@ -14,7 +14,7 @@ public class SchoolInformationMasterReponse {
     private Integer schoolId;
     private String schoolIdentificationNumber;
     private String schoolName;
-    private String schoolAddresss;
+    private String schoolAddress;
     private String schoolAutonomus;
     private String schoolEveryDayStartTiming;
     private String schoolEveryDayEndTiming;
@@ -25,7 +25,7 @@ public class SchoolInformationMasterReponse {
         this.schoolId=Integer.parseInt(String.valueOf(objects[0]));
         this.schoolIdentificationNumber=String.valueOf(objects[1]);
         this.schoolName=String.valueOf(objects[2]);
-        this.schoolAddresss=String.valueOf(objects[3]);
+        this.schoolAddress=String.valueOf(objects[3]);
         this.schoolAutonomus=String.valueOf(objects[4]);
         this.schoolEveryDayStartTiming=String.valueOf(objects[5]);
         this.schoolEveryDayEndTiming=String.valueOf(objects[6]);

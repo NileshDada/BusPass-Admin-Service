@@ -129,4 +129,18 @@ public class DateTimeUtils {
             throw new BusPassException("DateTimeUtils", false, ex.getMessage());
         }
     }
+
+    public static String extractOnlyDateInDDMMYYY(String inputDate) {
+        try {
+            // define formatter
+            SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd hh:mm");
+            // This is the format date we want
+            DateFormat mSDF = new SimpleDateFormat("dd MMM, yyyy");
+
+            return mSDF.format(formatter.parse(inputDate));
+        } catch (Exception ex) {
+            log.error("Inside DateTimeUtils >> extractDateInDDMMYYY() : {}", ex);
+            throw new BusPassException("DateTimeUtils", false, ex.getMessage());
+        }
+    }
 }

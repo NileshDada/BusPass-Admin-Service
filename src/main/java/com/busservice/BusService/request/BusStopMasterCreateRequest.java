@@ -2,8 +2,10 @@ package com.busservice.BusService.request;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
+import lombok.ToString;
 
 @Data
+@ToString
 public class BusStopMasterCreateRequest {
 
     @Schema(example = "1", description = "This field is used for routes id")

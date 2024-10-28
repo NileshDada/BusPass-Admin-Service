@@ -30,4 +30,7 @@ public interface BusStopMasterRepo extends JpaRepository<BusStopMasterEntity, In
     @Query(value = SQLQueryConstants.BUS_STOP_MASTER_DETAILS_BY_ID, nativeQuery = true)
     List<Object[]> getBusStopMasterDetailById(@Param("busStopId") Integer busStopId);
 
+    @Query(value = SQLQueryConstants.ROUTES_NAME_FROM_BUS_STOP_MASTER, nativeQuery = true)
+    List<Object[]> ddRouteNameFromBusStopMaster();
+
 }

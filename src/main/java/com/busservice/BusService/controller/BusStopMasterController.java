@@ -1,6 +1,7 @@
 package com.busservice.BusService.controller;
 
 
+import com.busservice.BusService.dto.DDRoutesMasterResponse;
 import com.busservice.BusService.request.BusStopMasterCreateRequest;
 import com.busservice.BusService.request.BusStopMasterUpdateRequest;
 import com.busservice.BusService.request.RoutesMasterCreateRequest;
@@ -24,6 +25,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.List;
+
 @CrossOrigin
 @RestController
 @RequestMapping(value = "/bus-stop-master")
@@ -34,6 +37,7 @@ public class BusStopMasterController {
 
     @PostMapping
     public ResponseEntity<BusPassResponse> saveBusStopMaster(@RequestBody BusStopMasterCreateRequest busStopMasterCreateRequest) {
+        System.out.println(busStopMasterCreateRequest);
         BusPassResponse response = busStopMasterService.saveBusStopMaster(busStopMasterCreateRequest);
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
@@ -70,5 +74,10 @@ public class BusStopMasterController {
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
+    @GetMapping(value = "/dd-routes")
+    public ResponseEntity<List<DDRoutesMasterResponse>> ddBusRoutesMasterDetails() {
 
+        List<DDRoutesMasterResponse> response = busStopMasterService.ddBusRoutesMasterDetails();
+        return new ResponseEntity<>(response, HttpStatus.OK);
+    }
 }

@@ -1,5 +1,7 @@
 package com.busservice.BusService.response;
 
+import com.busservice.BusService.utils.DateTimeUtils;
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -42,16 +44,24 @@ public class StudentPassMasterReponse {
     private String toBusStopNo;
     private String studPassAmount;
     private String studPassAmountPaidStatus;
+    private Integer schoolId;
     private String schoolName;
-    private String schoolAddresss;
+    private String schoolAddress;
     private String schoolAutonomus;
-    private String schoolUdiseNo;
+    private String schoolIdentificationNumber;
     private String schoolEveryDayStartTiming;
-    private String schoolEveryDayEndTiming;
+        private String schoolEveryDayEndTiming;
     private String studCourseName;
     private String studClassName;
     private String studRollNo;
     private String studPassStatus;
+
+
+    private String custAddress;
+    private String custMobileNo;
+    private String custEmailId;
+    private String custGender;
+    private String custDateOfBirth;
     private String remark;
     private String statusCd;
 
@@ -65,13 +75,22 @@ public class StudentPassMasterReponse {
         this.passTypeId=Integer.parseInt(String.valueOf(objects[6]));
         this.passTypeName=String.valueOf(objects[7]);
         this.passTypeDescription=String.valueOf(objects[8]);
-        this.passTypeEndDate=String.valueOf(objects[9]);
+
+        if(null!=objects[9]) {
+            this.passTypeEndDate = DateTimeUtils.extractDateInDDMMYYY(String.valueOf(objects[9]));
+        }
+
+
         this.passTypeCollectionLocation=String.valueOf(objects[10]);
         this.passTypeAmount=String.valueOf(objects[11]);
         this.passTypeAgeLimit=String.valueOf(objects[12]);
 
-        this.studPassCreatedDate=String.valueOf(objects[13]);
-        this.studPassExpiryDate=String.valueOf(objects[14]);
+        if(null!=objects[13]) {
+            this.studPassCreatedDate = DateTimeUtils.extractDateInDDMMYYY(String.valueOf(objects[13]));
+        }
+        if(null!=objects[14]) {
+            this.studPassExpiryDate = DateTimeUtils.extractDateInDDMMYYY(String.valueOf(objects[14]));
+        }
         this.routesId=Integer.parseInt(String.valueOf(objects[15]));
         this.routesName=String.valueOf(objects[16]);
         this.routesStartLocation=String.valueOf(objects[17]);
@@ -84,17 +103,29 @@ public class StudentPassMasterReponse {
         this.toBusStopNo=String.valueOf(objects[24]);
         this.studPassAmount=String.valueOf(objects[25]);
         this.studPassAmountPaidStatus=String.valueOf(objects[26]);
-        this.schoolName=String.valueOf(objects[27]);
-        this.schoolAddresss=String.valueOf(objects[28]);
-        this.schoolAutonomus=String.valueOf(objects[29]);
-        this.schoolUdiseNo=String.valueOf(objects[30]);
-        this.schoolEveryDayStartTiming=String.valueOf(objects[31]);
-        this.schoolEveryDayEndTiming=String.valueOf(objects[32]);
-        this.studCourseName=String.valueOf(objects[33]);
-        this.studClassName=String.valueOf(objects[34]);
-        this.studRollNo=String.valueOf(objects[35]);
-        this.studPassStatus=String.valueOf(objects[36]);
-        this.remark = String.valueOf(objects[37]);
-        this.statusCd = String.valueOf(objects[38]);
+        this.schoolId=Integer.parseInt(String.valueOf(objects[27]));
+
+        this.schoolName=String.valueOf(objects[28]);
+        this.schoolIdentificationNumber=String.valueOf(objects[29]);
+        this.schoolAddress=String.valueOf(objects[30]);
+        this.schoolAutonomus=String.valueOf(objects[31]);
+
+        this.schoolEveryDayStartTiming=String.valueOf(objects[32]);
+        this.schoolEveryDayEndTiming=String.valueOf(objects[33]);
+        this.studCourseName=String.valueOf(objects[34]);
+        this.studClassName=String.valueOf(objects[35]);
+        this.studRollNo=String.valueOf(objects[36]);
+        this.studPassStatus=String.valueOf(objects[37]);
+
+        this.custAddress=String.valueOf(objects[38]);
+        this.custMobileNo=String.valueOf(objects[39]);
+        this.custEmailId=String.valueOf(objects[40]);
+        this.custGender=String.valueOf(objects[41]);
+
+        if(null!=objects[42]) {
+            this.custDateOfBirth = DateTimeUtils.extractOnlyDateInDDMMYYY(String.valueOf(objects[42]));
+        }
+        this.remark = String.valueOf(objects[43]);
+        this.statusCd = String.valueOf(objects[44]);
     }
 }
