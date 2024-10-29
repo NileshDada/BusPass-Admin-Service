@@ -1,13 +1,11 @@
 package com.busservice.BusService.controller;
 
 
-import com.busservice.BusService.dto.DDRoutesMasterResponse;
-import com.busservice.BusService.request.LanguageMasterCreateRequest;
+import com.busservice.BusService.response.dropdown.RoutesMasterDD;
 import com.busservice.BusService.request.RoutesMasterCreateRequest;
 import com.busservice.BusService.request.RoutesMasterUpdateRequest;
 import com.busservice.BusService.response.BusPassResponse;
 import com.busservice.BusService.response.RoutesMasterReponse;
-import com.busservice.BusService.service.LanguageMasterService;
 import com.busservice.BusService.service.RoutesMasterService;
 import io.swagger.v3.oas.annotations.Parameter;
 import org.springdoc.core.converters.models.PageableAsQueryParam;
@@ -76,9 +74,9 @@ public class RoutesMasterController {
     }
 
     @GetMapping(value = "/dd-routes")
-    public ResponseEntity<List<DDRoutesMasterResponse>> ddBusRoutesMasterDetails() {
+    public ResponseEntity<List<RoutesMasterDD>> ddBusRoutesMasterDetails() {
 
-        List<DDRoutesMasterResponse> response = routesMasterService.ddBusRoutesMasterDetails();
+        List<RoutesMasterDD> response = routesMasterService.ddBusRoutesMasterDetails();
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 }

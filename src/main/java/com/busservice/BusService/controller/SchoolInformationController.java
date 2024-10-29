@@ -1,6 +1,5 @@
 package com.busservice.BusService.controller;
 
-import com.busservice.BusService.dto.DDRoutesMasterResponse;
 import com.busservice.BusService.request.SchoolInformationMasterCreateRequest;
 import com.busservice.BusService.request.SchoolInformationMasterUpdateRequest;
 import com.busservice.BusService.response.BusPassResponse;

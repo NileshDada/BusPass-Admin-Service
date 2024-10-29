@@ -1,20 +1,14 @@
 package com.busservice.BusService.service.serviceimpl;
 
 import com.busservice.BusService.constant.BusPassConstant;
-import com.busservice.BusService.dto.DDRoutesMasterResponse;
-import com.busservice.BusService.entity.LanguageMasterEntity;
+import com.busservice.BusService.response.dropdown.RoutesMasterDD;
 import com.busservice.BusService.entity.RoutesMasterEntity;
 import com.busservice.BusService.exception.BusPassException;
-import com.busservice.BusService.repository.LanguageMasterRepo;
 import com.busservice.BusService.repository.RoutesMasterRepo;
-import com.busservice.BusService.request.LanguageMasterCreateRequest;
 import com.busservice.BusService.request.RoutesMasterCreateRequest;
 import com.busservice.BusService.request.RoutesMasterUpdateRequest;
 import com.busservice.BusService.response.BusPassResponse;
-import com.busservice.BusService.response.LanguageMasterReponse;
 import com.busservice.BusService.response.RoutesMasterReponse;
-import com.busservice.BusService.response.dropdown.LanguageMasterDD;
-import com.busservice.BusService.service.LanguageMasterService;
 import com.busservice.BusService.service.RoutesMasterService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -141,12 +135,12 @@ public class RoutesMasterServiceImpl implements RoutesMasterService {
     }
 
     @Override
-    public List<DDRoutesMasterResponse> ddBusRoutesMasterDetails() {
-        List<DDRoutesMasterResponse> ddRoutesMasterResponses = new ArrayList<>();
+    public List<RoutesMasterDD> ddBusRoutesMasterDetails() {
+        List<RoutesMasterDD> ddRoutesMasterResponses = new ArrayList<>();
         List<RoutesMasterEntity> routesMasterEntities = routesMasterRepo.findByStatusCd("A");
         if (routesMasterEntities.size() > 0) {
             for (RoutesMasterEntity routesMasterEntity : routesMasterEntities) {
-                DDRoutesMasterResponse ddRoutesMasterResponse = new DDRoutesMasterResponse();
+                RoutesMasterDD ddRoutesMasterResponse = new RoutesMasterDD();
                 ddRoutesMasterResponse.setRoutesId(routesMasterEntity.getRoutesId());
                 ddRoutesMasterResponse.setRoutesName(routesMasterEntity.getRoutesName());
                 ddRoutesMasterResponses.add(ddRoutesMasterResponse);

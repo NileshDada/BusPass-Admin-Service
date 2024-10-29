@@ -1,14 +1,13 @@
 package com.busservice.BusService.controller;
 
 
-import com.busservice.BusService.dto.DDRoutesMasterResponse;
+import com.busservice.BusService.response.dropdown.BusStopMasterDD;
+import com.busservice.BusService.response.dropdown.RoutesMasterDD;
 import com.busservice.BusService.request.BusStopMasterCreateRequest;
 import com.busservice.BusService.request.BusStopMasterUpdateRequest;
-import com.busservice.BusService.request.RoutesMasterCreateRequest;
 import com.busservice.BusService.response.BusPassResponse;
 import com.busservice.BusService.response.BusStopMasterReponse;
 import com.busservice.BusService.service.BusStopMasterService;
-import com.busservice.BusService.service.RoutesMasterService;
 import io.swagger.v3.oas.annotations.Parameter;
 import org.springdoc.core.converters.models.PageableAsQueryParam;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -75,9 +74,17 @@ public class BusStopMasterController {
     }
 
     @GetMapping(value = "/dd-routes")
-    public ResponseEntity<List<DDRoutesMasterResponse>> ddBusRoutesMasterDetails() {
+    public ResponseEntity<List<RoutesMasterDD>> ddBusRoutesMasterDetails() {
 
-        List<DDRoutesMasterResponse> response = busStopMasterService.ddBusRoutesMasterDetails();
+        List<RoutesMasterDD> response = busStopMasterService.ddBusRoutesMasterDetails();
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
+
+    @GetMapping(value = "/dd-bus-stop")
+    public ResponseEntity<List<BusStopMasterDD>> ddBusStopMasterDetails(@RequestParam(required = false) Integer routesId) {
+
+        List<BusStopMasterDD> response = busStopMasterService.ddBusStopMasterDetails(routesId);
+        return new ResponseEntity<>(response, HttpStatus.OK);
+    }
+
 }

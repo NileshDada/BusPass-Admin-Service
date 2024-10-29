@@ -14,6 +14,8 @@ public final class SQLQueryConstants {
     public static final String BUS_STOP_MASTER_DETAILS_BY_PAGING_COUNT = "select count(*) from bus_stop_master bsm, routes_master rm where bsm.routes_id=rm.routes_id and bsm.bus_stop_id = coalesce(:busStopId, bsm.bus_stop_id) and bsm.bus_stop_name = coalesce(:busStopName, bsm.bus_stop_name) and bsm.status_cd = coalesce(:statusCd, bsm.status_cd)";
     public static final String BUS_STOP_MASTER_DETAILS_BY_ID = "select bsm.bus_stop_id, bsm.bus_stop_name, bsm.bus_stop_no, rm.routes_id, rm.routes_name, rm.routes_start_location, rm.routes_end_location, bsm.remark, bsm.status_cd from bus_stop_master bsm, routes_master rm where bsm.routes_id=rm.routes_id and bsm.bus_stop_id = coalesce(:busStopId, bsm.bus_stop_id)";
 
+    public static final String BUS_STOP_MASTER_DD = "select bus_stop_id, bus_stop_name,bus_stop_no from bus_stop_master where status_cd='A' and routes_id = coalesce(:routesId, routes_id)";
+
     public static final String ROUTES_NAME_FROM_BUS_STOP_MASTER = "select distinct(bsm.routes_id), rm.routes_name from bus_stop_master bsm, routes_master rm where bsm.routes_id=rm.routes_id and rm.status_cd='A'";
 
     public static final String DOCUMENT_MASTER_DETAILS_BY_PAGING = "select doc_id, doc_name, remark, status_cd from document_master where doc_id = coalesce(:docId, doc_id) and doc_name = coalesce(:docName, doc_name) and status_cd = coalesce(:statusCd, status_cd) order by :sortName asc limit :pageSize offset :pageOffset";

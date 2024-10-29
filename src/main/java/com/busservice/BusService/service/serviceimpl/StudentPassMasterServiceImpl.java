@@ -132,7 +132,7 @@ public class StudentPassMasterServiceImpl implements StudentPassMasterService {
         studentPassMasterEntity.setRoutesId(masterCreateRequest.getRoutesId());
         studentPassMasterEntity.setFromBusStopId(masterCreateRequest.getFromBusStopId());
         studentPassMasterEntity.setToBusStopId(masterCreateRequest.getToBusStopId());
-        studentPassMasterEntity.setStudPassAmount(masterCreateRequest.getStudPassAmount());
+        studentPassMasterEntity.setStudPassAmount(masterCreateRequest.getPassTypeAmount());
         studentPassMasterEntity.setStudPassAmountPaidStatus("Pending");
         studentPassMasterEntity.setSchoolId(masterCreateRequest.getSchoolId());
         studentPassMasterEntity.setSchoolIdentificationNumber(masterCreateRequest.getSchoolIdentificationNumber());

@@ -1,7 +1,6 @@
 package com.busservice.BusService.service;
 
-import com.busservice.BusService.dto.DDRoutesMasterResponse;
-import com.busservice.BusService.request.LanguageMasterCreateRequest;
+import com.busservice.BusService.response.dropdown.RoutesMasterDD;
 import com.busservice.BusService.request.RoutesMasterCreateRequest;
 import com.busservice.BusService.request.RoutesMasterUpdateRequest;
 import com.busservice.BusService.response.BusPassResponse;
@@ -21,7 +20,7 @@ public interface RoutesMasterService {
 
     public BusPassResponse deleteRoutesMasterDetails(Integer routesId);
 
-    public List<DDRoutesMasterResponse> ddBusRoutesMasterDetails();
+    public List<RoutesMasterDD> ddBusRoutesMasterDetails();
 
 
 

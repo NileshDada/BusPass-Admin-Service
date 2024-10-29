@@ -1,4 +1,4 @@
-package com.busservice.BusService.dto;
+package com.busservice.BusService.response.dropdown;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -13,11 +13,11 @@ import lombok.ToString;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class DDRoutesMasterResponse {
+public class RoutesMasterDD {
     Integer routesId;
     String routesName;
 
-    public DDRoutesMasterResponse(Object[] objects)
+    public RoutesMasterDD(Object[] objects)
     {
         this.routesId = Integer.parseInt(String.valueOf(objects[0]));
         this.routesName = String.valueOf(objects[1]);

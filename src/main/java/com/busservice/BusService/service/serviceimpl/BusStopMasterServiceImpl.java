@@ -1,21 +1,17 @@
 package com.busservice.BusService.service.serviceimpl;
 
 import com.busservice.BusService.constant.BusPassConstant;
-import com.busservice.BusService.dto.DDRoutesMasterResponse;
+import com.busservice.BusService.response.dropdown.BusStopMasterDD;
+import com.busservice.BusService.response.dropdown.RoutesMasterDD;
 import com.busservice.BusService.entity.BusStopMasterEntity;
-import com.busservice.BusService.entity.RoutesMasterEntity;
-import com.busservice.BusService.entity.SchoolInformationMasterEntity;
 import com.busservice.BusService.exception.BusPassException;
 import com.busservice.BusService.repository.BusStopMasterRepo;
-import com.busservice.BusService.repository.RoutesMasterRepo;
 import com.busservice.BusService.request.BusStopMasterCreateRequest;
 import com.busservice.BusService.request.BusStopMasterUpdateRequest;
-import com.busservice.BusService.request.RoutesMasterCreateRequest;
 import com.busservice.BusService.response.BusPassResponse;
 import com.busservice.BusService.response.BusStopMasterReponse;
-import com.busservice.BusService.response.RoutesMasterReponse;
+import com.busservice.BusService.response.dropdown.SchoolInfoMasterDD;
 import com.busservice.BusService.service.BusStopMasterService;
-import com.busservice.BusService.service.RoutesMasterService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageImpl;
@@ -24,7 +20,6 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -81,6 +76,20 @@ public class BusStopMasterServiceImpl implements BusStopMasterService {
         return null;
     }
 
+    @Override
+    public List<BusStopMasterDD> ddBusStopMasterDetails(Integer routesId) {
+        try {
+            List<Object[]> busStopMasterData = busStopMasterRepo.ddBusStopMaster(routesId);
+            List<BusStopMasterDD> busStopMasterDDS = busStopMasterData.stream().map(BusStopMasterDD::new).collect(Collectors.toList());
+            if (busStopMasterDDS.size() > 0) {
+                return busStopMasterDDS;
+            }
+        } catch (Exception ex) {
+            log.error("BusStopMasterServiceImpl >> ddBusStopMasterDetails : {}", ex);
+            throw new BusPassException("BusStopMasterServiceImpl >> ddBusStopMasterDetails", false, ex.getMessage());
+        }
+        return null;
+    }
     @Override
     public BusPassResponse findBusStopMasterDetails(Integer busStopId, String busStopName, String statusCd, Pageable requestPageable) {
         try {
@@ -148,10 +157,10 @@ public class BusStopMasterServiceImpl implements BusStopMasterService {
     }
 
     @Override
-    public List<DDRoutesMasterResponse> ddBusRoutesMasterDetails() {
+    public List<RoutesMasterDD> ddBusRoutesMasterDetails() {
         try {
             List<Object[]> languageMasterData = busStopMasterRepo.ddRouteNameFromBusStopMaster();
-            List<DDRoutesMasterResponse> busStopMasterReponses = languageMasterData.stream().map(DDRoutesMasterResponse::new).collect(Collectors.toList());
+            List<RoutesMasterDD> busStopMasterReponses = languageMasterData.stream().map(RoutesMasterDD::new).collect(Collectors.toList());
             if (busStopMasterReponses.size() > 0) {
                 return busStopMasterReponses;
             }

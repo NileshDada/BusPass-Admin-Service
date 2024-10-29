@@ -1,14 +1,12 @@
 package com.busservice.BusService.controller;
 
 
-import com.busservice.BusService.dto.DDRoutesMasterResponse;
-import com.busservice.BusService.request.BusStopMasterCreateRequest;
 import com.busservice.BusService.request.StudentPassMasterCreateRequest;
 import com.busservice.BusService.response.BusPassResponse;
 import com.busservice.BusService.response.StudentPassMasterReponse;
-import com.busservice.BusService.service.BusStopMasterService;
 import com.busservice.BusService.service.StudentPassMasterService;
 import io.swagger.v3.oas.annotations.Parameter;
+import lombok.extern.slf4j.Slf4j;
 import org.springdoc.core.converters.models.PageableAsQueryParam;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
@@ -23,11 +21,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.util.List;
-
 @CrossOrigin
 @RestController
 @RequestMapping(value = "/student-pass-master")
+@Slf4j
 public class StudentPassMasterController {
 
     @Autowired
@@ -35,6 +32,7 @@ public class StudentPassMasterController {
 
     @PostMapping
     public ResponseEntity<BusPassResponse> saveStudentPassMaster(@RequestBody StudentPassMasterCreateRequest busStopMasterCreateRequest) {
+        System.out.println(busStopMasterCreateRequest);
         BusPassResponse response = studentPassMasterService.saveStudentPassMaster(busStopMasterCreateRequest);
         return new ResponseEntity<>(response, HttpStatus.OK);
     }

@@ -2,8 +2,10 @@ package com.busservice.BusService.request;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
+import lombok.ToString;
 
 @Data
+@ToString
 public class StudentPassMasterCreateRequest {
 
     @Schema(example = "1", description = "This field is used for Student id")
@@ -23,7 +25,7 @@ public class StudentPassMasterCreateRequest {
     private Integer toBusStopId;
 
     @Schema(example = "400", description = "This field is used for Student pass amount")
-    private String studPassAmount;
+    private String passTypeAmount;
 
 
     @Schema(example = "1", description = "This field is used for Student start bus stop id")
