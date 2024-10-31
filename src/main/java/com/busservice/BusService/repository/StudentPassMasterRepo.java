@@ -15,7 +15,7 @@ import java.util.Optional;
 @Repository
 public interface StudentPassMasterRepo extends JpaRepository<StudentPassMasterEntity, Integer> {
 
-    //public Optional<BusStopMasterEntity> findByBusStopNameEqualsIgnoreCase(String busStopName);
+    public Optional<StudentPassMasterEntity> findByCustId(Integer custId);
 
     @Query(value = SQLQueryConstants.STUDENT_PASS_MASTER_DETAILS_BY_PAGING, nativeQuery = true)
     List<Object[]> getStudentPassMasterDetail(@Param("studPassId") Integer studPassId, @Param("studPassStatus") String studPassStatus, @Param("statusCd") String statusCd, @Param("sortName") String sortName, @Param("pageSize") Integer pageSize, @Param("pageOffset") Integer pageOffset);

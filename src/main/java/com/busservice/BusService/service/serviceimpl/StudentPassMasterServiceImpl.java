@@ -33,11 +33,20 @@ public class StudentPassMasterServiceImpl implements StudentPassMasterService {
 
     @Override
     public BusPassResponse saveStudentPassMaster(StudentPassMasterCreateRequest masterCreateRequest) {
-        /*Optional<BusStopMasterEntity> optionalDepartmentEntity = studentPassMasterRepo.findByBusStopNameEqualsIgnoreCase(masterCreateRequest.getBusStopName());
-        if (optionalDepartmentEntity.isPresent()) {
-            log.error("Inside StudentPassMasterServiceImpl >> saveStudentPassMaster()");
-            throw new BusPassException("StudentPassMasterServiceImpl Class", false, "Student Pass already exist");
-        }*/
+        Optional<StudentPassMasterEntity> optionalStudentPassMasterEntity = studentPassMasterRepo.findByCustId(masterCreateRequest.getCustId());
+        int  requestMonthValue =DateTimeUtils.extractMonthValue(Instant.now().toString());
+        int  requestYearValue =DateTimeUtils.extractYear(Instant.now().toString());
+        if (optionalStudentPassMasterEntity.isPresent()) {
+            StudentPassMasterEntity studentPassMasterEntity=optionalStudentPassMasterEntity.get();
+            int  reportMonthValue =DateTimeUtils.extractMonthValue(studentPassMasterEntity.getStudPassCreatedDate().toString());
+            int  reportYearValue =DateTimeUtils.extractYear(studentPassMasterEntity.getStudPassCreatedDate().toString());
+            if(requestMonthValue==reportMonthValue && requestYearValue==reportYearValue){
+                return BusPassResponse.builder()
+                        .isSuccess(false)
+                        .responseMessage("For this month Pass is already approved")
+                        .build();
+            }
+        }
 
         StudentPassMasterEntity busStopMasterEntity = convertStudentPassMasterCreateRequestToEntity(masterCreateRequest);
         try {
