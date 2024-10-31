@@ -156,3 +156,31 @@ crte_ts TIMESTAMP not null DEFAULT CURRENT_TIMESTAMP,
 lst_updt_ts TIMESTAMP null,
 lst_updt_user_id VARCHAR(20) null
 );
+
+
+create table report_student_pass_master(
+report_stud_pass_id serial  PRIMARY key,
+stud_pass_id Integer,
+stud_pass_form_no VARCHAR(100),
+cust_id Integer,
+pass_type_id Integer,
+stud_pass_created_date timestamp,
+stud_pass_expire_date timestamp,
+routes_id Integer,
+from_bus_stop_id Integer,
+to_bus_stop_id Integer,
+stud_pass_amount VARCHAR(50),
+stud_pass_amount_paid_status VARCHAR(100),
+school_id Integer,
+school_identification_number VARCHAR(100),
+stud_class_name VARCHAR(100),
+stud_course_name VARCHAR(100),
+stud_roll_no VARCHAR(100),
+stud_pass_status VARCHAR(20),
+remark VARCHAR(200),
+status_cd VARCHAR(10),
+crte_user_id VARCHAR(20) ,
+crte_ts TIMESTAMP not null DEFAULT CURRENT_TIMESTAMP,
+lst_updt_ts TIMESTAMP null,
+lst_updt_user_id VARCHAR(20) null
+);
