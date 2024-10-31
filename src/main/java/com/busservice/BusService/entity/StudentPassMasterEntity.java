@@ -3,6 +3,7 @@ package com.busservice.BusService.entity;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import lombok.ToString;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -17,6 +18,7 @@ import java.time.Instant;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
+@ToString
 public class StudentPassMasterEntity extends AuditEnabledEntity {
 
     @Id

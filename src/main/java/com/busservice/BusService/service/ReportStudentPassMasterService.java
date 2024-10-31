@@ -8,7 +8,9 @@ import org.springframework.data.domain.Pageable;
 
 public interface ReportStudentPassMasterService {
 
-    public BusPassResponse findStudentPassMasterDetails(Integer reportStudPassId,Integer studPassId, String studPassStatus, String statusCd, Pageable pageable);
+    public BusPassResponse findStudentPassMasterDetails(Integer reportStudPassId,Integer custId, Integer studPassId, String studPassStatus, String statusCd, Pageable pageable);
 
-    public ReportStudentPassMasterReponse findStudentPassMasterDetailsByStudPassId(Integer studPassId);
+    public ReportStudentPassMasterReponse findStudentPassMasterDetailsByStudPassId(Integer reportStudPassId);
+
+    public BusPassResponse passTypeSchedular();
 }

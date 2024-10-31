@@ -35,12 +35,13 @@ public class ReportStudentPassMasterController {
     @GetMapping
     @PageableAsQueryParam
     public ResponseEntity<BusPassResponse> findStudentPassMasterDetails(@RequestParam(required = false) Integer reportStudPassId,
+                                                                        @RequestParam(required = false) Integer custId,
                                                                         @RequestParam(required = false) Integer studPassId,
                                                                      @RequestParam(required = false) String studPassStatus,
                                                                      @RequestParam(required = false) String statusCd,
                                                                      @Parameter(hidden = true) Pageable pageable) {
 
-        BusPassResponse response = studentPassMasterService.findStudentPassMasterDetails(reportStudPassId, studPassId, studPassStatus, statusCd, pageable);
+        BusPassResponse response = studentPassMasterService.findStudentPassMasterDetails(reportStudPassId,custId, studPassId, studPassStatus, statusCd, pageable);
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
@@ -48,6 +49,14 @@ public class ReportStudentPassMasterController {
     public ResponseEntity<ReportStudentPassMasterReponse> findStudentPassMasterDetailsByStudPassId(@RequestParam(required = false) Integer reportStudPassId) {
 
         ReportStudentPassMasterReponse response = studentPassMasterService.findStudentPassMasterDetailsByStudPassId(reportStudPassId);
+        return new ResponseEntity<>(response, HttpStatus.OK);
+    }
+
+
+    @GetMapping("/pass-type-schedular")
+    public ResponseEntity<BusPassResponse> passTypeSchedular() {
+
+        BusPassResponse response = studentPassMasterService.passTypeSchedular();
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 }
